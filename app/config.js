@@ -152,10 +152,9 @@ module.exports = {
 				{
 					title:"Related Sites",
 					links:[
-						{name: "Bitcoin Explorer", url:"https://btc.chaintools.io", imgUrl:"/img/logo/btc.svg"},
-						{name: "LND Admin", url:"https://lnd-admin.chaintools.io", imgUrl:"/img/logo/lnd-admin.png"},
-						//{name: "Litecoin Explorer", url:"https://ltc.chaintools.io", imgUrl:"/img/logo/ltc.svg"},
-						//{name: "Lightning Explorer", url:"https://lightning.chaintools.io", imgUrl:"/img/logo/lightning.svg"},
+						{name: "Veil Project", url:"https://veil-project.com", imgUrl:""},
+						{name: "Veil Stats", url:"https://veil-stats.com", imgUrl:""},
+						{name: "Veil Tools", url:"https://veil.tools", imgUrl:""}
 					]
 				}
 			]
@@ -183,14 +182,14 @@ module.exports = {
 	donations:{
 		addresses:{
 			coins:["BTC"],
-			sites:{"BTC":"https://btc.chaintools.io"},
+			sites:{"BTC":""},
 
-			"BTC":{address:"3NPGpNyLLmVKCEcuipBs7G4KpQJoJXjDGe"}
+			"BTC":{address:""}
 		},
 		btcpayserver:{
-			host:"https://btcpay.chaintools.io",
-			storeId:"DUUExHMvKNAFukrJZHCShMhwZvfPq87QnkUhvE6h5kh2",
-			notifyEmail:"chaintools.io@gmail.com"
+			host:"",
+			storeId:"",
+			notifyEmail:""
 		}
 	}
 };

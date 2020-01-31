@@ -50,11 +50,11 @@ var currencyUnits = [
 ];
 
 module.exports = {
-	name:"Bitcoin",
-	ticker:"BTC",
-	logoUrl:"/img/logo/btc.svg",
-	siteTitle:"Bitcoin Explorer",
-	siteDescriptionHtml:"<b>BTC Explorer</b> is <a href='https://github.com/janoside/btc-rpc-explorer). If you run your own [Bitcoin Full Node](https://bitcoin.org/en/full-node), **BTC Explorer** can easily run alongside it, communicating via RPC calls. See the project [ReadMe](https://github.com/janoside/btc-rpc-explorer) for a list of features and instructions for running.",
+	name:"Veil",
+	ticker:"Veil",
+	logoUrl:"/img/logo/veil.png",
+	siteTitle:"Veil Explorer",
+	siteDescriptionHtml:"<b>Veil Explorer</b> is <a href='https://github.com/codeofalltrades/btc-rpc-explorer). If you run your own [Bitcoin Full Node](https://bitcoin.org/en/full-node), **BTC Explorer** can easily run alongside it, communicating via RPC calls. See the project [ReadMe](https://github.com/codeofalltrades/btc-rpc-explorer) for a list of features and instructions for running.",
 	nodeTitle:"Bitcoin Full Node",
 	nodeUrl:"https://bitcoin.org/en/full-node",
 	demoSiteUrl: "https://btc.chaintools.io",
@@ -63,7 +63,7 @@ module.exports = {
 		"https://raw.githubusercontent.com/blockchain/Blockchain-Known-Pools/master/pools.json"
 	],
 	maxBlockWeight: 4000000,
-	targetBlockTimeSeconds: 600,
+	targetBlockTimeSeconds: 60,
 	currencyUnits:currencyUnits,
 	currencyUnitsByName:{"BTC":currencyUnits[0], "mBTC":currencyUnits[1], "bits":currencyUnits[2], "sat":currencyUnits[3]},
 	baseCurrencyUnit:currencyUnits[3],

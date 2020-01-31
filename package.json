@@ -1,7 +1,7 @@
 {
   "name": "btc-rpc-explorer",
   "version": "1.1.8",
-  "description": "Self-hosted Bitcoin blockchain explorer",
+  "description": "Self-hosted Veil blockchain explorer",
   "private": false,
   "bin": "bin/cli.js",
   "scripts": {
@@ -10,14 +10,16 @@
   },
   "keywords": [
     "bitcoin",
-    "litecoin",
+    "veil",
+    "ringct",
+    "privacy",
     "blockchain"
   ],
-  "author": "Dan Janosik <dan@47.io>",
+  "author": "codeofalltrades <codeofalltrades@outlook.com>",
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/janoside/btc-rpc-explorer.git"
+    "url": "git+https://github.com/codeofalltrades/btc-rpc-explorer.git"
   },
   "dependencies": {
     "async": "^3.1.0",

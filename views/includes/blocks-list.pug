@@ -6,9 +6,8 @@ div(class="table-responsive")
 				th(class="data-header") Height
 				th(class="data-header") Timestamp (utc)
 				th(class="data-header text-right") Age
-				th(class="data-header") Miner
+				th(class="data-header") Type
 				th(class="data-header text-right") Transactions
-				th(class="data-header text-right") Average Fee
 				th(class="data-header text-right") Size (bytes)
 
 				if (blocks && blocks.length > 0 && blocks[0].weight)
@@ -28,26 +27,18 @@ div(class="table-responsive")
 
 						- var timeAgo = moment.duration(moment.utc(new Date()).diff(moment.utc(new Date(parseInt(block.time) * 1000))));
 						td(class="data-cell monospace text-right") #{timeAgo.format()}
-						td(class="data-cell monospace")
-							if (block.miner && block.miner.name)
-								span(data-toggle="tooltip", title=("Identified by: " + block.miner.identifiedBy), class="rounded bg-primary text-white px-2 py-1") #{block.miner.name}
-							else
-								span ?
 
-						
+						td(class="data-cell monospace") #{block.proof_type.toLocaleString()}
+
 						td(class="data-cell monospace text-right") #{block.tx.length.toLocaleString()}
 
-						td(class="data-cell monospace text-right")
-							- var currencyValue = new Decimal(block.totalFees).dividedBy(block.tx.length);
-							include ./value-display.pug
-							
 						td(class="data-cell monospace text-right") #{block.size.toLocaleString()}
 
 						if (blocks && blocks.length > 0 && blocks[0].weight)
 							td(class="data-cell monospace text-right")
 								- var fullPercent = new Decimal(100 * block.weight / coinConfig.maxBlockWeight).toDecimalPlaces(1);
 
-								span #{block.weight.toLocaleString()} 
+								span #{block.weight.toLocaleString()}
 								small(class="font-weight-light text-muted") (#{fullPercent}%)
 
 								div(class="progress", style="height: 4px;")

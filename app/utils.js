@@ -481,23 +481,34 @@ function geoLocateIpAddresses(ipAddresses, provider) {
 }
 
 function parseExponentStringDouble(val) {
+	try{
 	var [lead,decimal,pow] = val.toString().split(/e|\./);
 	return +pow <= 0 
 		? "0." + "0".repeat(Math.abs(pow)-1) + lead + decimal
 		: lead + ( +pow >= decimal.length ? (decimal + "0".repeat(+pow-decimal.length)) : (decimal.slice(0,+pow)+"."+decimal.slice(+pow)));
+	}
+	catch(ex){
+		return val;
+	}
 }
 
 function formatLargeNumber(n, decimalPlaces) {
-	for (var i = 0; i < exponentScales.length; i++) {
-		var item = exponentScales[i];
-
-		var fraction = new Decimal(n / item.val);
-		if (fraction >= 1) {
-			return [fraction.toDecimalPlaces(decimalPlaces), item];
+	try{
+		for (var i = 0; i < exponentScales.length; i++) {
+			var item = exponentScales[i];
+	
+			var fraction = new Decimal(n / item.val);
+			if (fraction >= 1) {
+				return [fraction.toDecimalPlaces(decimalPlaces), item];
+			}
 		}
+	
+		return [new Decimal(n).toDecimalPlaces(decimalPlaces), {}];
 	}
-
-	return [new Decimal(n).toDecimalPlaces(decimalPlaces), {}];
+	catch(ex){
+		return n;
+	}
+	
 }
 
 function rgbToHsl(r, g, b) {

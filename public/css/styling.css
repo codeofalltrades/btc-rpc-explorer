@@ -252,3 +252,17 @@ footer a:hover {
 .hljs-type, .hljs-string, .hljs-number, .hljs-selector-id, .hljs-selector-class, .hljs-quote, .hljs-template-tag, .hljs-deletion {
 	color: #3aa54f;
 }
+
+.xs-small{
+	font-size: 70%
+}
+
+.xxs-small{
+	font-size: 60%
+}
+
+.text-overflow-ellipsis{
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+}

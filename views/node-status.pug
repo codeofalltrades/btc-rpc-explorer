@@ -50,7 +50,7 @@ block content
 								td(class="monospace") #{getnetworkinfo.protocolversion}
 
 							if (getblockchaininfo.size_on_disk)
-								- var sizeData = utils.formatLargeNumber(getblockchaininfo.size_on_disk, 2);
+								- var sizeData = utils.formatLargeNumber(getblockchaininfo.size_on_disk, 2);;
 								tr
 									td(class="properties-header") Blockchain Size
 									td(class="monospace") #{sizeData[0]} #{sizeData[1].abbreviation}B
@@ -66,14 +66,21 @@ block content
 									br
 									span(class="text-muted") (headers: #{getblockchaininfo.headers.toLocaleString()})
 							tr
-								td(class="properties-header") Difficulty
+								td(class="properties-header") PoW Difficulty
 								td(class="monospace")
-									- var difficultyData = utils.formatLargeNumber(getblockchaininfo.difficulty, 3);
+									- var difficultyData = getblockchaininfo.difficulty_pow;
 									
-									span(title=parseFloat(getblockchaininfo.difficulty).toLocaleString(), data-toggle="tooltip")
-										span #{difficultyData[0]}
-										span  x 10
-										sup #{difficultyData[1].exponent}
+									span(title=parseFloat(getblockchaininfo.difficulty_pow).toLocaleString(), data-toggle="tooltip")
+										span #{difficultyData}
+										//- span  x 10
+										//- sup #{difficultyData}
+							tr
+								td(class="properties-header") PoS Difficulty
+								td(class="monospace")
+									- var posDifficultyData = getblockchaininfo.difficulty_pos;
+									
+									span(title=parseFloat(getblockchaininfo.difficulty_pos).toLocaleString(), data-toggle="tooltip")
+										span #{posDifficultyData}
 
 							tr
 								td(class="properties-header") Status

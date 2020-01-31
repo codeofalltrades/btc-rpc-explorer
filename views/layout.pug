@@ -19,7 +19,7 @@ html(lang="en")
 		
 		link(rel='stylesheet', href='/css/styling.css')
 
-		link(rel="icon", type="image/png", href=("/img/logo/" + config.coin.toLowerCase() + ".png"))
+		link(rel="icon", type="image/png", href=("/img/logo/veil.png"))
 
 		block headContent
 			title Explorer
@@ -142,64 +142,9 @@ html(lang="en")
 		footer(class="footer border-top border-primary bg-dark pt-3 pb-1 px-3 text-white", style="border-width: 5px !important;")
 			div(class="container")
 				div(class="row")
-					div(class="col-md-5")
-						dl
-							dt Source
-							dd
-								a(href="https://github.com/janoside/btc-rpc-explorer") github.com/janoside/btc-rpc-explorer
-								
-								if (global.sourcecodeProjectMetadata)
-									div(class="mt-2")
-										a(href="https://github.com/janoside/btc-rpc-explorer", class="btn btn-primary btn-sm mr-3 mb-1 text-decoration-none")
-											i(class="fas fa-star mr-2")
-											span(class="mr-2") Star 
-											span(class="badge bg-white text-dark") #{global.sourcecodeProjectMetadata.stargazers_count}
+					div(class="col-md-12 text-center")
+						span © Veil Project
 
-										a(href="https://github.com/janoside/btc-rpc-explorer/fork", class="btn btn-primary btn-sm mr-3 mb-1 text-decoration-none")
-											i(class="fas fa-code-branch mr-2")
-											span(class="mr-2") Fork 
-											span(class="badge bg-white text-dark") #{global.sourcecodeProjectMetadata.forks_count}
-
-
-							
-							dt App Details
-							dd
-								span version: #{global.appVersion}
-								if (sourcecodeVersion)
-									br
-									span commit: 
-										a(href=("https://github.com/janoside/btc-rpc-explorer/commit/" + sourcecodeVersion)) #{sourcecodeVersion}
-								
-								br
-								span released: #{sourcecodeDate}
-								span(style="font-size: 0.9em;")  (
-									a(href="/changelog") changelog
-									span )
-
-							if (config.demoSite)
-								dt Public Demos
-								dd
-									if (coinConfig.demoSiteUrl)
-										a(href=coinConfig.demoSiteUrl) #{coinConfig.demoSiteUrl}
-									else
-										a(href="https://btc-explorer.chaintools.io") https://btc-explorer.chaintools.io
-									
-									div(class="mt-2")
-										- var demoSiteCoins = ["BTC"];
-										each demoSiteCoin in demoSiteCoins
-											a(href=coinConfigs[demoSiteCoin].demoSiteUrl, class="mr-2", title=coinConfigs[demoSiteCoin].siteTitle)
-												img(src=("/img/logo/" + demoSiteCoin.toLowerCase() + ".svg"), alt=demoSiteCoin.toLowerCase())
-
-										a(href="https://lnd-admin.chaintools.io", class="mr-2", title="LND Admin")
-											img(src=("/img/logo/lnd-admin.png"), style="width: 32px; height: 32px;", alt="LND Admin")
-
-					div(class="col-md-7 text-md-right")
-						dl
-							dd
-								button.btn.btn-primary(type="button", class="btn btn-primary", data-toggle="modal", data-target="#exampleModalCenter")
-									i(class="fas fa-heart mr-2")
-									span Support Project
-		
 		script(src="/js/jquery.min.js", integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=")
 		script(src="/js/popper.min.js", integrity="sha384-wHAiFfRlMFy6i5SRaxvfOCifBUQy1xHdJ/yoi7FRNXMRBu5WHdZYu1hA6ZOblgut")
 		script(src="/js/bootstrap.min.js", integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM")
@@ -229,5 +174,4 @@ html(lang="en")
 
 				gtag('config', '#{config.credentials.googleAnalyticsTrackingId}');
 
-		
 		block endOfBody
