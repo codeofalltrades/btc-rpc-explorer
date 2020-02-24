@@ -55,17 +55,17 @@ module.exports = {
 	logoUrl:"/img/logo/veil.png",
 	siteTitle:"Veil Explorer",
 	siteDescriptionHtml:"<b>Veil Explorer</b> is <a href='https://github.com/codeofalltrades/btc-rpc-explorer). If you run your own [Bitcoin Full Node](https://bitcoin.org/en/full-node), **BTC Explorer** can easily run alongside it, communicating via RPC calls. See the project [ReadMe](https://github.com/codeofalltrades/btc-rpc-explorer) for a list of features and instructions for running.",
-	nodeTitle:"Bitcoin Full Node",
+	nodeTitle:"Veil Full Node",
 	nodeUrl:"https://bitcoin.org/en/full-node",
 	demoSiteUrl: "https://btc.chaintools.io",
 	miningPoolsConfigUrls:[
-		"https://raw.githubusercontent.com/btccom/Blockchain-Known-Pools/master/pools.json",
-		"https://raw.githubusercontent.com/blockchain/Blockchain-Known-Pools/master/pools.json"
+		//"https://raw.githubusercontent.com/btccom/Blockchain-Known-Pools/master/pools.json",
+		//"https://raw.githubusercontent.com/blockchain/Blockchain-Known-Pools/master/pools.json"
 	],
 	maxBlockWeight: 4000000,
 	targetBlockTimeSeconds: 60,
 	currencyUnits:currencyUnits,
-	currencyUnitsByName:{"BTC":currencyUnits[0], "mBTC":currencyUnits[1], "bits":currencyUnits[2], "sat":currencyUnits[3]},
+	currencyUnitsByName:{"Veil":currencyUnits[0], "mBTC":currencyUnits[1], "bits":currencyUnits[2], "sat":currencyUnits[3]},
 	baseCurrencyUnit:currencyUnits[3],
 	defaultCurrencyUnit:currencyUnits[0],
 	feeSatoshiPerByteBucketMaxima: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 15, 20, 25, 50, 75, 100, 150],
@@ -389,7 +389,7 @@ module.exports = {
 			eras.push(new Decimal8(previous).dividedBy(2));
 		}
 
-		var halvingBlockInterval = (chain == "regtest" ? 150 : 210000);
+		var halvingBlockInterval = (chain === "regtest" ? 150 : 210000);
 		var index = Math.floor(blockHeight / halvingBlockInterval);
 
 		return eras[index];

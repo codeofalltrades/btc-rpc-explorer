@@ -31,7 +31,7 @@ var ipMemoryCache = {};
 var ipCache = {
 	get:function(key) {
 		return new Promise(function(resolve, reject) {
-			if (ipMemoryCache[key] != null) {
+			if (ipMemoryCache[key] !== null) {
 				resolve({key:key, value:ipMemoryCache[key]});
 
 				return;
@@ -39,7 +39,7 @@ var ipCache = {
 
 			if (redisCache.active) {
 				redisCache.get("ip-" + key).then(function(redisResult) {
-					if (redisResult != null) {
+					if (redisResult !== null) {
 						resolve({key:key, value:redisResult});
 
 						return;
@@ -127,21 +127,21 @@ function getRandomString(length, chars) {
 var formatCurrencyCache = {};
 
 function getCurrencyFormatInfo(formatType) {
-	if (formatCurrencyCache[formatType] == null) {
+	if (formatCurrencyCache[formatType] === null) {
 		for (var x = 0; x < coins[config.coin].currencyUnits.length; x++) {
 			var currencyUnit = coins[config.coin].currencyUnits[x];
 
 			for (var y = 0; y < currencyUnit.values.length; y++) {
 				var currencyUnitValue = currencyUnit.values[y];
 
-				if (currencyUnitValue == formatType) {
+				if (currencyUnitValue === formatType) {
 					formatCurrencyCache[formatType] = currencyUnit;
 				}
 			}
 		}
 	}
 
-	if (formatCurrencyCache[formatType] != null) {
+	if (formatCurrencyCache[formatType] !== null) {
 		return formatCurrencyCache[formatType];
 	}
 
@@ -150,11 +150,11 @@ function getCurrencyFormatInfo(formatType) {
 
 function formatCurrencyAmountWithForcedDecimalPlaces(amount, formatType, forcedDecimalPlaces) {
 	var formatInfo = getCurrencyFormatInfo(formatType);
-	if (formatInfo != null) {
+	if (formatInfo !== null) {
 		var dec = new Decimal(amount);
 
 		var decimalPlaces = formatInfo.decimalPlaces;
-		//if (decimalPlaces == 0 && dec < 1) {
+		//if (decimalPlaces === 0 && dec < 1) {
 		//	decimalPlaces = 5;
 		//}
 
@@ -162,13 +162,13 @@ function formatCurrencyAmountWithForcedDecimalPlaces(amount, formatType, forcedD
 			decimalPlaces = forcedDecimalPlaces;
 		}
 
-		if (formatInfo.type == "native") {
+		if (formatInfo.type === "native") {
 			dec = dec.times(formatInfo.multiplier);
 
 			return addThousandsSeparators(dec.toDecimalPlaces(decimalPlaces)) + " " + formatInfo.name;
 
-		} else if (formatInfo.type == "exchanged") {
-			if (global.exchangeRates != null && global.exchangeRates[formatInfo.multiplier] != null) {
+		} else if (formatInfo.type === "exchanged") {
+			if (global.exchangeRates !== null && global.exchangeRates[formatInfo.multiplier] !== null) {
 				dec = dec.times(global.exchangeRates[formatInfo.multiplier]);
 
 				return addThousandsSeparators(dec.toDecimalPlaces(decimalPlaces)) + " " + formatInfo.name;
@@ -208,7 +208,7 @@ function formatValueInActiveCurrency(amount) {
 }
 
 function satoshisPerUnitOfActiveCurrency() {
-	if (global.currencyFormatType != null && global.exchangeRates != null) {
+	if (global.currencyFormatType !== null && global.exchangeRates !== null) {
 		var exchangeType = global.currencyFormatType.toLowerCase();
 
 		if (!global.exchangeRates[global.currencyFormatType.toLowerCase()]) {
@@ -231,7 +231,7 @@ function satoshisPerUnitOfActiveCurrency() {
 
 		var exchangedAmt = parseInt(dec);
 
-		if (exchangeType == "eur") {
+		if (exchangeType === "eur") {
 			return addThousandsSeparators(exchangedAmt) + ` ${unitName}/€`;
 
 		} else {
@@ -242,21 +242,21 @@ function satoshisPerUnitOfActiveCurrency() {
 
 	return null;
 
-	if (global.currencyFormatType) {
-		return formatExchangedCurrency(amount, global.currencyFormatType);
+	//if (global.currencyFormatType) {
+	//	return formatExchangedCurrency(amount, global.currencyFormatType);
 
-	} else {
-		return formatExchangedCurrency(amount, "usd");
-	}
+	//} else {
+	//	return formatExchangedCurrency(amount, "usd");
+	//}
 }
 
 function formatExchangedCurrency(amount, exchangeType) {
-	if (global.exchangeRates != null && global.exchangeRates[exchangeType.toLowerCase()] != null) {
+	if (global.exchangeRates !== null && global.exchangeRates[exchangeType.toLowerCase()] !== null) {
 		var dec = new Decimal(amount);
 		dec = dec.times(global.exchangeRates[exchangeType.toLowerCase()]);
 		var exchangedAmt = parseFloat(Math.round(dec * 100) / 100).toFixed(2);
 
-		if (exchangeType == "eur") {
+		if (exchangeType === "eur") {
 			return "€" + addThousandsSeparators(exchangedAmt);
 
 		} else {
@@ -298,7 +298,7 @@ function logMemoryUsage() {
 }
 
 function getMinerFromCoinbaseTx(tx) {
-	if (tx == null || tx.vin == null || tx.vin.length == 0) {
+	if (tx === null || tx.vin === null || tx.vin.length === 0) {
 		return null;
 	}
 	
@@ -309,7 +309,7 @@ function getMinerFromCoinbaseTx(tx) {
 			for (var payoutAddress in miningPoolsConfig.payout_addresses) {
 				if (miningPoolsConfig.payout_addresses.hasOwnProperty(payoutAddress)) {
 					if (tx.vout && tx.vout.length > 0 && tx.vout[0].scriptPubKey && tx.vout[0].scriptPubKey.addresses && tx.vout[0].scriptPubKey.addresses.length > 0) {
-						if (tx.vout[0].scriptPubKey.addresses[0] == payoutAddress) {
+						if (tx.vout[0].scriptPubKey.addresses[0] === payoutAddress) {
 							var minerInfo = miningPoolsConfig.payout_addresses[payoutAddress];
 							minerInfo.identifiedBy = "payout address " + payoutAddress;
 
@@ -321,11 +321,11 @@ function getMinerFromCoinbaseTx(tx) {
 
 			for (var coinbaseTag in miningPoolsConfig.coinbase_tags) {
 				if (miningPoolsConfig.coinbase_tags.hasOwnProperty(coinbaseTag)) {
-					if (hex2ascii(tx.vin[0].coinbase).indexOf(coinbaseTag) != -1) {
-						var minerInfo = miningPoolsConfig.coinbase_tags[coinbaseTag];
+					if (hex2ascii(tx.vin[0].coinbase).indexOf(coinbaseTag) !== -1) {
+						var coinbaseInfo = miningPoolsConfig.coinbase_tags[coinbaseTag];
 						minerInfo.identifiedBy = "coinbase tag '" + coinbaseTag + "'";
 
-						return minerInfo;
+						return coinbaseInfo;
 					}
 				}
 			}
@@ -360,8 +360,8 @@ function getTxTotalInputOutputValues(tx, txInputs, blockHeight) {
 			}
 		}
 		
-		for (var i = 0; i < tx.vout.length; i++) {
-			totalOutputValue = totalOutputValue.plus(new Decimal(tx.vout[i].value));
+		for (var ij = 0; ij < tx.vout.length; ij++) {
+			totalOutputValue = totalOutputValue.plus(new Decimal(tx.vout[ij].value));
 		}
 	} catch (err) {
 		logError("2308sh0sg44", err, {tx:tx, txInputs:txInputs, blockHeight:blockHeight});
@@ -371,7 +371,7 @@ function getTxTotalInputOutputValues(tx, txInputs, blockHeight) {
 }
 
 function getBlockTotalFeesFromCoinbaseTxAndBlockHeight(coinbaseTx, blockHeight) {
-	if (coinbaseTx == null) {
+	if (coinbaseTx === null) {
 		return 0;
 	}
 
@@ -395,11 +395,11 @@ function refreshExchangeRates() {
 
 	if (coins[config.coin].exchangeRateData) {
 		request(coins[config.coin].exchangeRateData.jsonUrl, function(error, response, body) {
-			if (error == null && response && response.statusCode && response.statusCode == 200) {
+			if (error === null && response && response.statusCode && response.statusCode === 200) {
 				var responseBody = JSON.parse(body);
 
 				var exchangeRates = coins[config.coin].exchangeRateData.responseBodySelectorFunction(responseBody);
-				if (exchangeRates != null) {
+				if (exchangeRates !== null) {
 					global.exchangeRates = exchangeRates;
 					global.exchangeRatesUpdateTime = new Date();
 
@@ -432,7 +432,7 @@ function geoLocateIpAddresses(ipAddresses, provider) {
 			
 			promises.push(new Promise(function(resolve2, reject2) {
 				ipCache.get(ipStr).then(function(result) {
-					if (result.value == null) {
+					if (result.value === null) {
 						var apiUrl = "http://api.ipstack.com/" + result.key + "?access_key=" + config.credentials.ipStackComApiAccessKey;
 						
 						debugLog("Requesting IP-geo: " + apiUrl);
@@ -459,7 +459,7 @@ function geoLocateIpAddresses(ipAddresses, provider) {
 			for (var i = 0; i < results.length; i++) {
 				if (results[i].needToProcess) {
 					var res = results[i].response;
-					if (res != null && res["statusCode"] == 200) {
+					if (res !== null && res["statusCode"] === 200) {
 						var resBody = JSON.parse(res["body"]);
 						var ip = resBody["ip"];
 
@@ -516,7 +516,7 @@ function rgbToHsl(r, g, b) {
     var max = Math.max(r, g, b), min = Math.min(r, g, b);
     var h, s, l = (max + min) / 2;
 
-    if(max == min){
+    if(max === min){
         h = s = 0; // achromatic
     }else{
         var d = max - min;
@@ -567,7 +567,7 @@ function logError(errorId, err, optionalUserData = null) {
 		global.errorLog.splice(0, 1);
 	}
 
-	debugErrorLog("Error " + errorId + ": " + err + ", json: " + JSON.stringify(err) + (optionalUserData != null ? (", userData: " + optionalUserData + " (json: " + JSON.stringify(optionalUserData) + ")") : ""));
+	debugErrorLog("Error " + errorId + ": " + err + ", json: " + JSON.stringify(err) + (optionalUserData !== null ? (", userData: " + optionalUserData + " (json: " + JSON.stringify(optionalUserData) + ")") : ""));
 	
 	if (err && err.stack) {
 		debugErrorLog("Stack: " + err.stack);

@@ -19,7 +19,7 @@ function getAddressDetails(address, scriptPubkey, sort, limit, offset) {
 		};
 
 		request(options, function(error, response, body) {
-			if (error == null && response && response.statusCode && response.statusCode == 200) {
+			if (error === null && response && response.statusCode && response.statusCode === 200) {
 				var blockcypherJson = JSON.parse(body);
 
 				var response = {};

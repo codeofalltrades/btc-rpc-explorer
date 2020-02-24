@@ -10,7 +10,7 @@ function getAddressDetails(address, scriptPubkey, sort, limit, offset) {
 			return;
 		}
 
-		if (sort == "asc") {
+		if (sort === "asc") {
 			// need to query the total number of tx first, then build paging info from that value
 			var options = {
 				url: `https://blockchain.info/rawaddr/${address}?limit=1`,
@@ -20,7 +20,7 @@ function getAddressDetails(address, scriptPubkey, sort, limit, offset) {
 			};
 
 			request(options, function(error, response, body) {
-				if (error == null && response && response.statusCode && response.statusCode == 200) {
+				if (error == null && response && response.statusCode && response.statusCode === 200) {
 					var blockchainJson = JSON.parse(body);
 
 					var txCount = blockchainJson.n_tx;
@@ -78,7 +78,7 @@ function getAddressDetailsSortDesc(address, limit, offset) {
 		};
 
 		request(options, function(error, response, body) {
-			if (error == null && response && response.statusCode && response.statusCode == 200) {
+			if (error === null && response && response.statusCode && response.statusCode == 200) {
 				var blockchainJson = JSON.parse(body);
 
 				var response = {};

@@ -42,7 +42,6 @@ var request = require("request");
 var qrcode = require("qrcode");
 var addressApi = require("./app/api/addressApi.js");
 var electrumAddressApi = require("./app/api/electrumAddressApi.js");
-var coreApi = require("./app/api/coreApi.js");
 var auth = require('./app/auth.js');
 
 var package_json = require('./package.json');
@@ -65,15 +64,12 @@ app.engine('pug', (path, options, fn) => {
 
 app.set('view engine', 'pug');
 
-// basic http authentication
-// if (process.env.BTCEXP_BASIC_AUTH_PASSWORD) {
-// 	app.disable('x-powered-by');
-// 	app.use(auth(process.env.BTCEXP_BASIC_AUTH_PASSWORD));
-// }
-
 // uncomment after placing your favicon in /public
 app.use(favicon(__dirname + '/public/favicon.ico'));
+
+// uncomment to add logger
 //app.use(logger('dev'));
+
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
@@ -86,7 +82,7 @@ app.use(session({
 app.use(express.static(path.join(__dirname, 'public')));
 
 process.on("unhandledRejection", (reason, p) => {
-	debugLog("Unhandled Rejection at: Promise", p, "reason:", reason, "stack:", (reason != null ? reason.stack : "null"));
+	debugLog("Unhandled Rejection at: Promise", p, "reason:", reason, "stack:", reason !== null ? reason.stack : "null");
 });
 
 function loadMiningPoolConfigs() {
@@ -128,7 +124,7 @@ function getSourcecodeProjectMetadata() {
 	};
 
 	request(options, function(error, response, body) {
-		if (error == null && response && response.statusCode && response.statusCode == 200) {
+		if (error === null && response && response.statusCode && response.statusCode === 200) {
 			var responseBody = JSON.parse(body);
 
 			global.sourcecodeProjectMetadata = responseBody;
@@ -163,14 +159,14 @@ function loadHistoricalDataForChain(chain) {
 
 	if (global.coinConfig.historicalData) {
 		global.coinConfig.historicalData.forEach(function(item) {
-			if (item.chain == chain) {
-				if (item.type == "blockheight") {
+			if (item.chain === chain) {
+				if (item.type === "blockheight") {
 					global.specialBlocks[item.blockHash] = item;
 
-				} else if (item.type == "tx") {
+				} else if (item.type === "tx") {
 					global.specialTransactions[item.txid] = item;
 
-				} else if (item.type == "address") {
+				} else if (item.type === "address") {
 					global.specialAddresses[item.address] = {type:"fun", addressInfo:item};
 				}
 			}
@@ -209,8 +205,8 @@ function onRpcConnectionVerified(getnetworkinfo, getblockchaininfo) {
 	// load historical/fun items for this chain
 	loadHistoricalDataForChain(global.activeBlockchain);
 
-	if (global.activeBlockchain == "main") {
-		if (global.exchangeRates == null) {
+	if (global.activeBlockchain === "main") {
+		if (global.exchangeRates === null) {
 			utils.refreshExchangeRates();
 		}
 
@@ -227,7 +223,7 @@ app.onStartup = function() {
 
 	loadChangelog();
 
-	if (global.sourcecodeVersion == null && fs.existsSync('.git')) {
+	if (global.sourcecodeVersion === null && fs.existsSync('.git')) {
 		simpleGit(".").log(["-n 1"], function(err, log) {
 			if (err) {
 				utils.logError("3fehge9ee", err, {desc:"Error accessing git repo"});
@@ -303,7 +299,7 @@ app.continueStartup = function() {
 			utils.logError("32907ghsd0ge", `Unrecognized value for BTCEXP_ADDRESS_API: '${config.addressApi}'. Valid options are: ${supportedAddressApis}`);
 		}
 
-		if (config.addressApi == "electrumx") {
+		if (config.addressApi === "electrumx") {
 			if (config.electrumXServers && config.electrumXServers.length > 0) {
 				electrumAddressApi.connectToServers().then(function() {
 					global.electrumAddressApi = electrumAddressApi;
@@ -342,7 +338,7 @@ app.use(function(req, res, next) {
 	// make session available in templates
 	res.locals.session = req.session;
 
-	if (config.credentials.rpc && req.session.host == null) {
+	if (config.credentials.rpc && req.session.host === null) {
 		req.session.host = config.credentials.rpc.host;
 		req.session.port = config.credentials.rpc.port;
 		req.session.username = config.credentials.rpc.username;
@@ -350,7 +346,7 @@ app.use(function(req, res, next) {
 
 	var userAgent = req.headers['user-agent'];
 	for (var i = 0; i < crawlerBotUserAgentStrings.length; i++) {
-		if (userAgent.indexOf(crawlerBotUserAgentStrings[i]) != -1) {
+		if (userAgent.indexOf(crawlerBotUserAgentStrings[i]) !== -1) {
 			res.locals.crawlerBot = true;
 		}
 	}
@@ -381,10 +377,10 @@ app.use(function(req, res, next) {
 
 	// theme
 	if (!req.session.uiTheme) {
-		var cookieValue = req.cookies['user-setting-uiTheme'];
+		var cookieUiTheme = req.cookies['user-setting-uiTheme'];
 
-		if (cookieValue) {
-			req.session.uiTheme = cookieValue;
+		if (cookieUiTheme) {
+			req.session.uiTheme = cookieUiTheme;
 
 		} else {
 			req.session.uiTheme = "";
@@ -393,10 +389,10 @@ app.use(function(req, res, next) {
 
 	// homepage banner
 	if (!req.session.hideHomepageBanner) {
-		var cookieValue = req.cookies['user-setting-hideHomepageBanner'];
+		var cookieHideHomepageBanner = req.cookies['user-setting-hideHomepageBanner'];
 
-		if (cookieValue) {
-			req.session.hideHomepageBanner = cookieValue;
+		if (cookieHideHomepageBanner) {
+			req.session.hideHomepageBanner = cookieHideHomepageBanner;
 
 		} else {
 			req.session.hideHomepageBanner = "false";

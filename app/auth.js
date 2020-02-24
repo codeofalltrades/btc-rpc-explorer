@@ -10,4 +10,4 @@ module.exports = pass => (req, res, next) => {
 
 	res.set('WWW-Authenticate', `Basic realm="Private Area"`)
 		.sendStatus(401);
-}
+};

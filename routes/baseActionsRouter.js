@@ -23,7 +23,7 @@ var addressApi = require("./../app/api/addressApi.js");
 const forceCsrf = csurf({ ignoreMethods: [] });
 
 router.get("/", function(req, res, next) {
-	if (req.session.host == null || req.session.host.trim() == "") {
+	if (req.session.host === null || req.session.host.trim() === "") {
 		if (req.cookies['rpc-host']) {
 			res.locals.host = req.cookies['rpc-host'];
 		}
@@ -71,10 +71,10 @@ router.get("/", function(req, res, next) {
 
 		var blockHeights = [];
 		if (getblockchaininfo.blocks) {
-			for (var i = 0; i < 10; i++) {
-				blockHeights.push(getblockchaininfo.blocks - i);
+			for (var ij = 0; ij < 10; ij++) {
+				blockHeights.push(getblockchaininfo.blocks - ij);
 			}
-		} else if (global.activeBlockchain == "regtest") {
+		} else if (global.activeBlockchain === "regtest") {
 			// hack: default regtest node returns getblockchaininfo.blocks=0, despite having a genesis block
 			// hack this to display the genesis block
 			blockHeights.push(0);
@@ -308,16 +308,16 @@ router.get("/blocks", function(req, res, next) {
 		res.locals.blockOffset = offset;
 
 		var blockHeights = [];
-		if (sort == "desc") {
-			for (var i = (getblockchaininfo.blocks - offset); i > (getblockchaininfo.blocks - offset - limit); i--) {
+		if (sort === "desc") {
+			for (var i = getblockchaininfo.blocks - offset; i > getblockchaininfo.blocks - offset - limit; i--) {
 				if (i >= 0) {
 					blockHeights.push(i);
 				}
 			}
 		} else {
-			for (var i = offset; i < (offset + limit); i++) {
-				if (i >= 0) {
-					blockHeights.push(i);
+			for (var ii = offset; ii < (offset + limit); ii++) {
+				if (ii >= 0) {
+					blockHeights.push(ii);
 				}
 			}
 		}
@@ -363,7 +363,7 @@ router.post("/search", function(req, res, next) {
 
 	req.session.query = req.body.query;
 
-	if (query.length == 64) {
+	if (query.length === 64) {
 		coreApi.getRawTransaction(query).then(function(tx) {
 			if (tx) {
 				res.redirect("/tx/" + query);
@@ -564,7 +564,7 @@ router.get("/tx/:transactionId", function(req, res, next) {
 			});
 		}));
 
-		if (rawTxResult.confirmations == null) {
+		if (rawTxResult.confirmations === null) {
 			promises.push(new Promise(function(resolve, reject) {
 				coreApi.getMempoolTxDetails(txid).then(function(mempoolDetails) {
 					res.locals.mempoolDetails = mempoolDetails;
@@ -704,12 +704,12 @@ router.get("/address/:address", function(req, res, next) {
 					if (addressDetails) {
 						res.locals.addressDetails = addressDetails;
 
-						if (addressDetails.balanceSat == 0) {
+						if (addressDetails.balanceSat === 0) {
 							// make sure zero balances pass the falsey check in the UI
 							addressDetails.balanceSat = "0";
 						}
 
-						if (addressDetails.txCount == 0) {
+						if (addressDetails.txCount === 0) {
 							// make sure txCount=0 pass the falsey check in the UI
 							addressDetails.txCount = "0";
 						}
@@ -794,7 +794,7 @@ router.get("/address/:address", function(req, res, next) {
 
 										for (var j = 0; j < tx.vout.length; j++) {
 											if (tx.vout[j].value > 0 && tx.vout[j].scriptPubKey && tx.vout[j].scriptPubKey.addresses && tx.vout[j].scriptPubKey.addresses.includes(address)) {
-												if (addrGainsByTx[tx.txid] == null) {
+												if (addrGainsByTx[tx.txid] === null) {
 													addrGainsByTx[tx.txid] = new Decimal(0);
 												}
 
@@ -802,13 +802,13 @@ router.get("/address/:address", function(req, res, next) {
 											}
 										}
 
-										for (var j = 0; j < tx.vin.length; j++) {
-											var txInput = txInputs[j];
-											var vinJ = tx.vin[j];
+										for (var jj = 0; jj < tx.vin.length; jj++) {
+											var txInput = txInputs[jj];
+											var vinJ = tx.vin[jj];
 
-											if (txInput != null) {
+											if (txInput !== null) {
 												if (txInput.vout[vinJ.vout] && txInput.vout[vinJ.vout].scriptPubKey && txInput.vout[vinJ.vout].scriptPubKey.addresses && txInput.vout[vinJ.vout].scriptPubKey.addresses.includes(address)) {
-													if (addrLossesByTx[tx.txid] == null) {
+													if (addrLossesByTx[tx.txid] === null) {
 														addrLossesByTx[tx.txid] = new Decimal(0);
 													}
 
@@ -1009,7 +1009,7 @@ router.get("/rpc-browser", function(req, res, next) {
 
 							for (var j = 0; j < argProperties.length; j++) {
 								if (argProperties[j] === "numeric") {
-									if (req.query.args[i] == null || req.query.args[i] == "") {
+									if (req.query.args[i] === null || req.query.args[i] === "") {
 										argValues.push(null);
 
 									} else {
@@ -1020,7 +1020,7 @@ router.get("/rpc-browser", function(req, res, next) {
 
 								} else if (argProperties[j] === "boolean") {
 									if (req.query.args[i]) {
-										argValues.push(req.query.args[i] == "true");
+										argValues.push(req.query.args[i] === "true");
 									}
 
 									break;

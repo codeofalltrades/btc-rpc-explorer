@@ -50,15 +50,14 @@ module.exports = {
 
 	cookieSecret: cookieSecret,
 
-	privacyMode: (process.env.BTCEXP_PRIVACY_MODE.toLowerCase() == "true"),
-	demoSite: (process.env.BTCEXP_DEMO.toLowerCase() == "true"),
-	queryExchangeRates: (process.env.BTCEXP_NO_RATES.toLowerCase() != "true"),
-	noInmemoryRpcCache: (process.env.BTCEXP_NO_INMEMORY_RPC_CACHE.toLowerCase() == "true"),
+	privacyMode: (process.env.BTCEXP_PRIVACY_MODE.toLowerCase() === "true"),
+	demoSite: (process.env.BTCEXP_DEMO.toLowerCase() === "true"),
+	queryExchangeRates: (process.env.BTCEXP_NO_RATES.toLowerCase() !== "true"),
+	noInmemoryRpcCache: (process.env.BTCEXP_NO_INMEMORY_RPC_CACHE.toLowerCase() === "true"),
 	
-	rpcConcurrency: (process.env.BTCEXP_RPC_CONCURRENCY || 10),
+	rpcConcurrency: process.env.BTCEXP_RPC_CONCURRENCY || 10,
 
-	rpcBlacklist:
-	  process.env.BTCEXP_RPC_ALLOWALL  ? []
+	rpcBlacklist: process.env.BTCEXP_RPC_ALLOWALL  ? []
 	: process.env.BTCEXP_RPC_BLACKLIST ? process.env.BTCEXP_RPC_BLACKLIST.split(',').filter(Boolean)
 	: [
 		"addnode",

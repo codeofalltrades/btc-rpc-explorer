@@ -19,7 +19,7 @@ var redisCache = {
 	get:function(key) {
 		return new Promise(function(resolve, reject) {
 			redisClient.getAsync(key).then(function(result) {
-				if (result == null) {
+				if (result === null) {
 					onCacheEvent("redis", "miss", key);
 
 					resolve(null);
@@ -44,7 +44,7 @@ var redisCache = {
 };
 
 module.exports = {
-	active: (redisClient != null),
+	active: (redisClient !== null),
 	get: redisCache.get,
 	set: redisCache.set
 }
