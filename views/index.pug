@@ -124,23 +124,65 @@ block content
 							span(class="font-weight-bold") Blockchain Size
 
 							- var sizeData = utils.formatLargeNumber(getblockchaininfo.size_on_disk, 2);
-							p(class="lead") #{sizeData[0]} #{sizeData[1].abbreviation}B
-
-					if (global.exchangeRates)
+							p(class="lead") #{sizeData[0]} #{sizeData[1].abbreviation}B 
+		
+					- var oBlockTypeStats = getBlockTypeStatsByStartHeight((getblockchaininfo.blocks - 1440);
+					if (oBlockTypeStats) == null)
 						div(class=networkSummaryColumnClass)
 							div(class="float-left", style="height: 40px; width: 40px; font-size: 12px;")
 								span
-									i(class="fas fa-money-bill-wave-alt fa-2x mr-2", style="margin-top: 7px;")
+									i(class="fas fa-dumbbell fa-2x mr-2", style="margin-top: 6px;")
 
-							span.font-weight-bold.border-dotted(data-toggle="tooltip", title=("Exchange-rate data from: " + coinConfig.exchangeRateData.jsonUrl)) Exchange Rate 
+							span(class="font-weight-bold") PoS
 
-							if (global.exchangeRates)
-								p(class="lead") #{utils.formatValueInActiveCurrency(1.0)}
-									small.text-muted.font-weight-light  (#{utils.satoshisPerUnitOfActiveCurrency()})
+							p(class="lead")
+								span #{oBlockTypeStats.PosCount}
+								<br>
+								span #{oBlockTypeStats.PosDiff}
+								<br> 
+								span #{oBlockTypeStats.PosPercent}%
 
-							else
-								p(class="lead") -
+						div(class=networkSummaryColumnClass)
+							div(class="float-left", style="height: 40px; width: 40px; font-size: 12px;")
+								span
+									i(class="fas fa-dumbbell fa-2x mr-2", style="margin-top: 6px;")
 
+							span(class="font-weight-bold") ProgPow
+
+							p(class="lead")
+								span #{oBlockTypeStats.ProgPowCount}
+								<br>
+								span #{oBlockTypeStats.ProgPowDiff}
+								<br> 
+								span #{oBlockTypeStats.ProgPowPercent}%
+
+						div(class=networkSummaryColumnClass)
+							div(class="float-left", style="height: 40px; width: 40px; font-size: 12px;")
+								span
+									i(class="fas fa-dumbbell fa-2x mr-2", style="margin-top: 6px;")
+
+							span(class="font-weight-bold") RandomX
+
+							p(class="lead")
+								span #{oBlockTypeStats.RandomxCount}
+								<br>
+								span #{oBlockTypeStats.RandomxDiff}								
+								<br> 
+								span #{oBlockTypeStats.RandomxPercent}%
+
+						div(class=networkSummaryColumnClass)
+							div(class="float-left", style="height: 40px; width: 40px; font-size: 12px;")
+								span
+									i(class="fas fa-dumbbell fa-2x mr-2", style="margin-top: 6px;")
+
+							span(class="font-weight-bold") SHA256D
+
+							p(class="lead")
+								span #{oBlockTypeStats.Sha256dCount}
+								<br>
+								span #{oBlockTypeStats.Sha256dDiff}
+								<br> 
+								span #{oBlockTypeStats.Sha256dPercent}%
 
 		include includes/tools-card.pug
 		

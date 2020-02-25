@@ -22,8 +22,8 @@ function onCacheEvent(cacheType, hitOrMiss, cacheKey) {
 
 function createMemoryLruCache(cacheObj) {
 	return {
-		get:function(key) {
-			return new Promise(function(resolve, reject) {
+		get: function (key) {
+			return new Promise(function (resolve, reject) {
 				var val = cacheObj.get(key);
 
 				if (val !== null) {
@@ -36,17 +36,17 @@ function createMemoryLruCache(cacheObj) {
 				resolve(cacheObj.get(key));
 			});
 		},
-		set:function(key, obj, maxAge) { cacheObj.set(key, obj, maxAge); }
+		set: function (key, obj, maxAge) { cacheObj.set(key, obj, maxAge); }
 	}
 }
 
 var noopCache = {
-	get:function(key) {
-		return new Promise(function(resolve, reject) {
+	get: function (key) {
+		return new Promise(function (resolve, reject) {
 			resolve(null);
 		});
 	},
-	set:function(key, obj, maxAge) {}
+	set: function (key, obj, maxAge) { }
 };
 
 var miscCache = null;
@@ -86,39 +86,39 @@ function getGenesisCoinbaseTransactionId() {
 function tryCacheThenRpcApi(cache, cacheKey, cacheMaxAge, rpcApiFunction, cacheConditionFunction) {
 	//debugLog("tryCache: " + cacheKey + ", " + cacheMaxAge);
 	if (cacheConditionFunction === null) {
-		cacheConditionFunction = function(obj) {
+		cacheConditionFunction = function (obj) {
 			return true;
 		};
 	}
 
-	return new Promise(function(resolve, reject) {
+	return new Promise(function (resolve, reject) {
 		var cacheResult = null;
 
-		var finallyFunc = function() {
+		var finallyFunc = function () {
 			if (cacheResult !== null) {
 				resolve(cacheResult);
 
 			} else {
-				rpcApiFunction().then(function(rpcResult) {
+				rpcApiFunction().then(function (rpcResult) {
 					if (rpcResult !== null && cacheConditionFunction(rpcResult)) {
 						cache.set(cacheKey, rpcResult, cacheMaxAge);
 					}
 
 					resolve(rpcResult);
 
-				}).catch(function(err) {
+				}).catch(function (err) {
 					reject(err);
 				});
 			}
 		};
 
-		cache.get(cacheKey).then(function(result) {
+		cache.get(cacheKey).then(function (result) {
 			cacheResult = result;
 
 			finallyFunc();
-			
-		}).catch(function(err) {
-			utils.logError("nds9fc2eg621tf3", err, {cacheKey:cacheKey});
+
+		}).catch(function (err) {
+			utils.logError("nds9fc2eg621tf3", err, { cacheKey: cacheKey });
 
 			finallyFunc();
 		});
@@ -129,7 +129,7 @@ function shouldCacheTransaction(tx) {
 	if (!tx.confirmations) {
 		return false;
 	}
-	
+
 	if (tx.confirmations < 1) {
 		return false;
 	}
@@ -168,16 +168,16 @@ function getUptimeSeconds() {
 }
 
 function getChainTxStats(blockCount) {
-	return tryCacheThenRpcApi(miscCache, "getChainTxStats-" + blockCount, 1200000, function() {
+	return tryCacheThenRpcApi(miscCache, "getChainTxStats-" + blockCount, 1200000, function () {
 		return rpcApi.getChainTxStats(blockCount);
 	});
 }
 
 function getTxCountStats(dataPtCount, blockStart, blockEnd) {
-	return new Promise(function(resolve, reject) {
+	return new Promise(function (resolve, reject) {
 		var dataPoints = dataPtCount;
 
-		getBlockchainInfo().then(function(getblockchaininfo) {
+		getBlockchainInfo().then(function (getblockchaininfo) {
 			if (typeof blockStart === "string") {
 				if (["genesis", "first", "zero"].includes(blockStart)) {
 					blockStart = 0;
@@ -214,7 +214,7 @@ function getTxCountStats(dataPtCount, blockStart, blockEnd) {
 				promises.push(getChainTxStats(chainTxStatsIntervals[ij]));
 			}
 
-			Promise.all(promises).then(function(results) {
+			Promise.all(promises).then(function (results) {
 				var txStats = {
 					txCounts: [],
 					txLabels: [],
@@ -223,27 +223,27 @@ function getTxCountStats(dataPtCount, blockStart, blockEnd) {
 
 				for (var i = results.length - 1; i >= 0; i--) {
 					if (results[i].window_tx_count) {
-						txStats.txCounts.push( {x:(getblockchaininfo.blocks - results[i].window_block_count), y: (results[i].txcount - results[i].window_tx_count)} );
-						txStats.txRates.push( {x:(getblockchaininfo.blocks - results[i].window_block_count), y: (results[i].txrate)} );
+						txStats.txCounts.push({ x: (getblockchaininfo.blocks - results[i].window_block_count), y: (results[i].txcount - results[i].window_tx_count) });
+						txStats.txRates.push({ x: (getblockchaininfo.blocks - results[i].window_block_count), y: (results[i].txrate) });
 						txStats.txLabels.push(i);
 					}
 				}
-				
-				resolve({txCountStats:txStats, getblockchaininfo:getblockchaininfo, totalTxCount:results[0].txcount});
 
-			}).catch(function(err) {
+				resolve({ txCountStats: txStats, getblockchaininfo: getblockchaininfo, totalTxCount: results[0].txcount });
+
+			}).catch(function (err) {
 				reject(err);
 			});
 
-		}).catch(function(err) {
+		}).catch(function (err) {
 			reject(err);
 		});
 	});
 }
 
 function getPeerSummary() {
-	return new Promise(function(resolve, reject) {
-		tryCacheThenRpcApi(miscCache, "getpeerinfo", 1000, rpcApi.getPeerInfo).then(function(getpeerinfo) {
+	return new Promise(function (resolve, reject) {
+		tryCacheThenRpcApi(miscCache, "getpeerinfo", 1000, rpcApi.getPeerInfo).then(function (getpeerinfo) {
 			var result = {};
 			result.getpeerinfo = getpeerinfo;
 
@@ -265,7 +265,7 @@ function getPeerSummary() {
 				}
 			}
 
-			versionSummary.sort(function(a, b) {
+			versionSummary.sort(function (a, b) {
 				if (b[1] > a[1]) {
 					return 1;
 
@@ -297,7 +297,7 @@ function getPeerSummary() {
 				}
 			}
 
-			servicesSummary.sort(function(a, b) {
+			servicesSummary.sort(function (a, b) {
 				if (b[1] > a[1]) {
 					return 1;
 
@@ -316,22 +316,22 @@ function getPeerSummary() {
 
 			resolve(result);
 
-		}).catch(function(err) {
+		}).catch(function (err) {
 			reject(err);
 		});
 	});
 }
 
 function getMempoolDetails(start, count) {
-	return new Promise(function(resolve, reject) {
-		tryCacheThenRpcApi(miscCache, "getMempoolTxids", 1000, rpcApi.getMempoolTxids).then(function(resultTxids) {
+	return new Promise(function (resolve, reject) {
+		tryCacheThenRpcApi(miscCache, "getMempoolTxids", 1000, rpcApi.getMempoolTxids).then(function (resultTxids) {
 			var txids = [];
 
 			for (var i = start; (i < resultTxids.length && i < (start + count)); i++) {
 				txids.push(resultTxids[i]);
 			}
 
-			getRawTransactions(txids).then(function(transactions) {
+			getRawTransactions(txids).then(function (transactions) {
 				var maxInputsTracked = config.site.txMaxInput;
 				var vinTxids = [];
 				for (var i = 0; i < transactions.length; i++) {
@@ -347,14 +347,14 @@ function getMempoolDetails(start, count) {
 				}
 
 				var txInputsByTransaction = {};
-				getRawTransactions(vinTxids).then(function(vinTransactions) {
+				getRawTransactions(vinTxids).then(function (vinTransactions) {
 					var vinTxById = {};
 
-					vinTransactions.forEach(function(tx) {
+					vinTransactions.forEach(function (tx) {
 						vinTxById[tx.txid] = tx;
 					});
 
-					transactions.forEach(function(tx) {
+					transactions.forEach(function (tx) {
 						txInputsByTransaction[tx.txid] = {};
 
 						if (tx && tx.vin) {
@@ -366,25 +366,25 @@ function getMempoolDetails(start, count) {
 						}
 					});
 
-					resolve({ txCount:resultTxids.length, transactions:transactions, txInputsByTransaction:txInputsByTransaction });
+					resolve({ txCount: resultTxids.length, transactions: transactions, txInputsByTransaction: txInputsByTransaction });
 
-				}).catch(function(err) {
+				}).catch(function (err) {
 					reject(err);
 				});
 
-			}).catch(function(err) {
+			}).catch(function (err) {
 				reject(err);
 			});
 
-		}).catch(function(err) {
+		}).catch(function (err) {
 			reject(err);
 		});
 	});
 }
 
 function getMempoolStats() {
-	return new Promise(function(resolve, reject) {
-		tryCacheThenRpcApi(miscCache, "getRawMempool", 5000, rpcApi.getRawMempool).then(function(result) {
+	return new Promise(function (resolve, reject) {
+		tryCacheThenRpcApi(miscCache, "getRawMempool", 5000, rpcApi.getRawMempool).then(function (result) {
 			var maxFee = 0;
 			var maxFeePerByte = 0;
 			var maxAge = 0;
@@ -406,8 +406,8 @@ function getMempoolStats() {
 					maxFeePerByte = txMempoolInfo.modifiedfee / size;
 				}
 
-				ages.push({age:age, txid:txid});
-				sizes.push({size:size, txid:txid});
+				ages.push({ age: age, txid: txid });
+				sizes.push({ size: size, txid: txid });
 
 				if (age > maxAge) {
 					maxAge = age;
@@ -418,7 +418,7 @@ function getMempoolStats() {
 				}
 			}
 
-			ages.sort(function(a, b) {
+			ages.sort(function (a, b) {
 				if (a.age !== b.age) {
 					return b.age - a.age;
 
@@ -427,7 +427,7 @@ function getMempoolStats() {
 				}
 			});
 
-			sizes.sort(function(a, b) {
+			sizes.sort(function (a, b) {
 				if (a.size !== b.size) {
 					return b.size - a.size;
 
@@ -446,7 +446,7 @@ function getMempoolStats() {
 
 			satoshiPerByteBucketLabels[0] = "[0 - " + satoshiPerByteBucketMaxima[0] + ")";
 			for (var i = 0; i < bucketCount; i++) {
-				satoshiPerByteBuckets[i] = {"count":0, "totalFees":0, "totalBytes":0};
+				satoshiPerByteBuckets[i] = { "count": 0, "totalFees": 0, "totalBytes": 0 };
 
 				if (i > 0 && i < bucketCount - 1) {
 					satoshiPerByteBucketLabels[i] = "[" + satoshiPerByteBucketMaxima[i - 1] + " - " + satoshiPerByteBucketMaxima[i] + ")";
@@ -492,15 +492,15 @@ function getMempoolStats() {
 			satoshiPerByteBucketLabels[bucketCount - 1] = (satoshiPerByteBucketMaxima[satoshiPerByteBucketMaxima.length - 1] + "+");
 
 			var summary = {
-				"count":0,
-				"totalFees":0,
-				"totalBytes":0,
-				"satoshiPerByteBuckets":satoshiPerByteBuckets,
-				"satoshiPerByteBucketLabels":satoshiPerByteBucketLabels,
-				"ageBucketTxCounts":ageBucketTxCounts,
-				"ageBucketLabels":ageBucketLabels,
-				"sizeBucketTxCounts":sizeBucketTxCounts,
-				"sizeBucketLabels":sizeBucketLabels
+				"count": 0,
+				"totalFees": 0,
+				"totalBytes": 0,
+				"satoshiPerByteBuckets": satoshiPerByteBuckets,
+				"satoshiPerByteBucketLabels": satoshiPerByteBucketLabels,
+				"ageBucketTxCounts": ageBucketTxCounts,
+				"ageBucketLabels": ageBucketLabels,
+				"sizeBucketTxCounts": sizeBucketTxCounts,
+				"sizeBucketLabels": sizeBucketLabels
 			};
 
 			for (var txidCurrent in result) {
@@ -560,64 +560,151 @@ function getMempoolStats() {
 
 			resolve(summary);
 
-		}).catch(function(err) {
+		}).catch(function (err) {
 			reject(err);
 		});
 	});
 }
 
 function getBlockByHeight(blockHeight) {
-	return tryCacheThenRpcApi(blockCache, "getBlockByHeight-" + blockHeight, 3600000, function() {
+	return tryCacheThenRpcApi(blockCache, "getBlockByHeight-" + blockHeight, 3600000, function () {
 		return rpcApi.getBlockByHeight(blockHeight);
 	});
 }
 
 function getBlocksByHeight(blockHeights) {
-	return new Promise(function(resolve, reject) {
+	return new Promise(function (resolve, reject) {
 		var promises = [];
 		for (var i = 0; i < blockHeights.length; i++) {
 			promises.push(getBlockByHeight(blockHeights[i]));
 		}
 
-		Promise.all(promises).then(function(results) {
+		Promise.all(promises).then(function (results) {
 			resolve(results);
 
-		}).catch(function(err) {
+		}).catch(function (err) {
 			reject(err);
 		});
 	});
 }
 
+function getBlocksByStartHeight(blockStartHeight) {
+	return new Promise(function (resolve, reject) {
+		var promises = [];
+		getBlockchainInfo.then(function (blockData) {
+			for (var i = blockData.blocks; i > blockStartHeight; i--) {
+				promises.push(getBlockByHeight(blockHeights[i]));
+			}
+		});
+
+		Promise.all(promises).then(function (results) {
+			resolve(results);
+
+		}).catch(function (err) {
+			reject(err);
+		});
+	});
+}
+
+function getBlockTypeStatsByStartHeight(blockStartHeight) {
+	return new Promise(function (resolve, reject) {
+		let iMaxBlock = 0;
+		let iPosCount = 0;
+		let dPosDiff = 0;
+		let iProgPowCount = 0;
+		let dProgPowDiff = 0;
+		let iRandomxCount = 0;
+		let dRandomxDiff = 0;
+		let iSha256dCount = 0;
+		let dSha256dDiff = 0;
+		getBlocksByStartHeight(blockStartHeight).then(function (blocks) {
+			for (var i = 0; i < blocks.length - 1; i++) {
+				if (blocks[i].height > iMaxBlock) {
+					iMaxBlock = blocks[i].height;
+				}
+				switch (blocks[i].proof_type.toLowerCase()) {
+					case 'proof-of-work (sha256d)':
+						iSha256dCount++;
+						if (dSha256dDiff === 0) { dSha256dDiff = blocks[i].difficulty; }
+						break;
+					case 'proof-of-work (randomx)':
+						iRandomxCount++;
+						if (dRandomxDiff === 0) { dRandomxDiff = blocks[i].difficulty; }
+						break;
+					case 'proof-of-work (progpow)':
+						iProgPowCount++;
+						if (dProgPowDiff === 0) { dProgPowDiff = blocks[i].difficulty; }
+						break;
+					default:
+						iPosCount++;
+						if (dPosDiff === 0) { dPosDiff = blocks[i].difficulty; }
+				}
+			}
+		});
+
+		var iBlockSampleSize = iMaxBlock - blockStartHeight;
+		var dPosPercent = (iPosCount / iBlockSampleSize * 100).toFixed(2);
+		var dSha256dPercent = (iSha256dCount / iBlockSampleSize * 100).toFixed(2);
+		var dRandomxPercent = (iRandomxCount / iBlockSampleSize * 100).toFixed(2);
+		var dProgPowPercent = (iProgPowCount / iBlockSampleSize * 100).toFixed(2);
+
+		var oChainStats = {
+			StartHeight: blockStartHeight,
+			EndHeight: iMaxBlock,
+			PosCount: iPosCount,
+			PosDiff: dPosDiff,
+			PosPercent: dPosPercent,
+			Sha256dCount: iSha256dCount,
+			Sha256dDiff: dSha256dDiff,
+			Sha256dPercent: dSha256dPercent,
+			RandomxCount: iRandomxCount,
+			RandomxDiff: dRandomxDiff,
+			RandomxPercent: dRandomxPercent,
+			ProgPowCount: iProgPowCount,
+			ProgPowDiff: dProgPowDiff,
+			ProgPowPercent: dProgPowPercent
+		};
+		// Return it
+		return oChainStats;
+		//Promise.all(promises).then(function (results) {
+		//	resolve(results);
+
+		//}).catch(function (err) {
+		//	reject(err);
+		//});
+	});
+}
+
 function getBlockByHash(blockHash) {
-	return tryCacheThenRpcApi(blockCache, "getBlockByHash-" + blockHash, 3600000, function() {
+	return tryCacheThenRpcApi(blockCache, "getBlockByHash-" + blockHash, 3600000, function () {
 		return rpcApi.getBlockByHash(blockHash);
 	});
 }
 
 function getBlocksByHash(blockHashes) {
-	return new Promise(function(resolve, reject) {
+	return new Promise(function (resolve, reject) {
 		var promises = [];
 		for (var i = 0; i < blockHashes.length; i++) {
 			promises.push(getBlockByHash(blockHashes[i]));
 		}
 
-		Promise.all(promises).then(function(results) {
+		Promise.all(promises).then(function (results) {
 			var result = {};
 
-			results.forEach(function(item) {
+			results.forEach(function (item) {
 				result[item.hash] = item;
 			});
 
 			resolve(result);
 
-		}).catch(function(err) {
+		}).catch(function (err) {
 			reject(err);
 		});
 	});
 }
 
 function getRawTransaction(txid) {
-	var rpcApiFunction = function() {
+	var rpcApiFunction = function () {
 		return rpcApi.getRawTransaction(txid);
 	};
 
@@ -625,28 +712,28 @@ function getRawTransaction(txid) {
 }
 
 function getTxUtxos(tx) {
-	return new Promise(function(resolve, reject) {
+	return new Promise(function (resolve, reject) {
 		var promises = [];
 
 		for (var i = 0; i < tx.vout.length; i++) {
 			promises.push(getUtxo(tx.txid, i));
 		}
 
-		Promise.all(promises).then(function(results) {
+		Promise.all(promises).then(function (results) {
 			resolve(results);
 
-		}).catch(function(err) {
+		}).catch(function (err) {
 			reject(err);
 		});
 	});
 }
 
 function getUtxo(txid, outputIndex) {
-	return new Promise(function(resolve, reject) {
-		tryCacheThenRpcApi(miscCache, "utxo-" + txid + "-" + outputIndex, 3600000, function() {
+	return new Promise(function (resolve, reject) {
+		tryCacheThenRpcApi(miscCache, "utxo-" + txid + "-" + outputIndex, 3600000, function () {
 			return rpcApi.getUtxo(txid, outputIndex);
 
-		}).then(function(result) {
+		}).then(function (result) {
 			// to avoid cache misses, rpcApi.getUtxo returns "0" instead of null
 			if (result === "0") {
 				resolve(null);
@@ -656,45 +743,45 @@ function getUtxo(txid, outputIndex) {
 
 			resolve(result);
 
-		}).catch(function(err) {
+		}).catch(function (err) {
 			reject(err);
 		});
 	});
 }
 
 function getMempoolTxDetails(txid) {
-	return tryCacheThenRpcApi(miscCache, "mempoolTxDetails-" + txid, 3600000, function() {
+	return tryCacheThenRpcApi(miscCache, "mempoolTxDetails-" + txid, 3600000, function () {
 		return rpcApi.getMempoolTxDetails(txid);
 	});
 }
 
 function getAddress(address) {
-	return tryCacheThenRpcApi(miscCache, "getAddress-" + address, 3600000, function() {
+	return tryCacheThenRpcApi(miscCache, "getAddress-" + address, 3600000, function () {
 		return rpcApi.getAddress(address);
 	});
 }
 
 function getRawTransactions(txids) {
-	return new Promise(function(resolve, reject) {
+	return new Promise(function (resolve, reject) {
 		var promises = [];
 		for (var i = 0; i < txids.length; i++) {
 			promises.push(getRawTransaction(txids[i]));
 		}
 
-		Promise.all(promises).then(function(results) {
+		Promise.all(promises).then(function (results) {
 			resolve(results);
 
-		}).catch(function(err) {
+		}).catch(function (err) {
 			reject(err);
 		});
 	});
 }
 
-function getRawTransactionsWithInputs(txids, maxInputs=-1) {
-	return new Promise(function(resolve, reject) {
-		getRawTransactions(txids).then(function(transactions) {
+function getRawTransactionsWithInputs(txids, maxInputs = -1) {
+	return new Promise(function (resolve, reject) {
+		getRawTransactions(txids).then(function (transactions) {
 			var maxInputsTracked = config.site.txMaxInput;
-			
+
 			if (maxInputs <= 0) {
 				maxInputsTracked = 1000000;
 
@@ -716,14 +803,14 @@ function getRawTransactionsWithInputs(txids, maxInputs=-1) {
 			}
 
 			var txInputsByTransaction = {};
-			getRawTransactions(vinTxids).then(function(vinTransactions) {
+			getRawTransactions(vinTxids).then(function (vinTransactions) {
 				var vinTxById = {};
 
-				vinTransactions.forEach(function(tx) {
+				vinTransactions.forEach(function (tx) {
 					vinTxById[tx.txid] = tx;
 				});
 
-				transactions.forEach(function(tx) {
+				transactions.forEach(function (tx) {
 					txInputsByTransaction[tx.txid] = {};
 
 					if (tx && tx.vin) {
@@ -735,17 +822,17 @@ function getRawTransactionsWithInputs(txids, maxInputs=-1) {
 					}
 				});
 
-				resolve({ transactions:transactions, txInputsByTransaction:txInputsByTransaction });
+				resolve({ transactions: transactions, txInputsByTransaction: txInputsByTransaction });
 			});
 		});
 	});
 }
 
 function getBlockByHashWithTransactions(blockHash, txLimit, txOffset) {
-	return new Promise(function(resolve, reject) {
-		getBlockByHash(blockHash).then(function(block) {
+	return new Promise(function (resolve, reject) {
+		getBlockByHash(blockHash).then(function (block) {
 			var txids = [];
-			
+
 			if (txOffset > 0) {
 				txids.push(block.tx[0]);
 			}
@@ -754,8 +841,8 @@ function getBlockByHashWithTransactions(blockHash, txLimit, txOffset) {
 				txids.push(block.tx[i]);
 			}
 
-			getRawTransactions(txids).then(function(transactions) {
-				if (transactions.length ===  txids.length) {
+			getRawTransactions(txids).then(function (transactions) {
+				if (transactions.length === txids.length) {
 					block.coinbaseTx = transactions[0];
 					block.totalFees = utils.getBlockTotalFeesFromCoinbaseTxAndBlockHeight(block.coinbaseTx, block.height);
 					block.miner = utils.getMinerFromCoinbaseTx(block.coinbaseTx);
@@ -781,14 +868,14 @@ function getBlockByHashWithTransactions(blockHash, txLimit, txOffset) {
 				}
 
 				var txInputsByTransaction = {};
-				getRawTransactions(vinTxids).then(function(vinTransactions) {
+				getRawTransactions(vinTxids).then(function (vinTransactions) {
 					var vinTxById = {};
 
-					vinTransactions.forEach(function(tx) {
+					vinTransactions.forEach(function (tx) {
 						vinTxById[tx.txid] = tx;
 					});
 
-					transactions.forEach(function(tx) {
+					transactions.forEach(function (tx) {
 						txInputsByTransaction[tx.txid] = {};
 
 						if (tx && tx.vin) {
@@ -799,7 +886,7 @@ function getBlockByHashWithTransactions(blockHash, txLimit, txOffset) {
 							}
 						}
 
-						resolve({ getblock:block, transactions:transactions, txInputsByTransaction:txInputsByTransaction });
+						resolve({ getblock: block, transactions: transactions, txInputsByTransaction: txInputsByTransaction });
 					});
 				});
 			});
@@ -808,17 +895,17 @@ function getBlockByHashWithTransactions(blockHash, txLimit, txOffset) {
 }
 
 function getHelp() {
-	return new Promise(function(resolve, reject) {
-		tryCacheThenRpcApi(miscCache, "getHelp", 3600000, rpcApi.getHelp).then(function(helpContent) {
+	return new Promise(function (resolve, reject) {
+		tryCacheThenRpcApi(miscCache, "getHelp", 3600000, rpcApi.getHelp).then(function (helpContent) {
 			var lines = helpContent.split("\n");
 			var sections = [];
 
-			lines.forEach(function(line) {
+			lines.forEach(function (line) {
 				if (line.startsWith("==")) {
 					var sectionName = line.substring(2);
 					sectionName = sectionName.substring(0, sectionName.length - 2).trim();
 
-					sections.push({name:sectionName, methods:[]});
+					sections.push({ name: sectionName, methods: [] });
 
 				} else if (line.trim().length > 0) {
 					var methodName = line.trim();
@@ -827,25 +914,25 @@ function getHelp() {
 						methodName = methodName.substring(0, methodName.indexOf(" "));
 					}
 
-					sections[sections.length - 1].methods.push({name:methodName, content:line.trim()});
+					sections[sections.length - 1].methods.push({ name: methodName, content: line.trim() });
 				}
 			});
 
 			resolve(sections);
 
-		}).catch(function(err) {
+		}).catch(function (err) {
 			reject(err);
 		});
 	});
 }
 
 function getRpcMethodHelp(methodName) {
-	var rpcApiFunction = function() {
+	var rpcApiFunction = function () {
 		return rpcApi.getRpcMethodHelp(methodName);
 	};
 
-	return new Promise(function(resolve, reject) {
-		tryCacheThenRpcApi(miscCache, "getHelp-" + methodName, 3600000, rpcApiFunction).then(function(helpContent) {
+	return new Promise(function (resolve, reject) {
+		tryCacheThenRpcApi(miscCache, "getHelp-" + methodName, 3600000, rpcApiFunction).then(function (helpContent) {
 			var output = {};
 			output.string = helpContent;
 
@@ -854,7 +941,7 @@ function getRpcMethodHelp(methodName) {
 			var lines = str.split("\n");
 			var argumentLines = [];
 			var catchArgs = false;
-			lines.forEach(function(line) {
+			lines.forEach(function (line) {
 				if (line.trim().length === 0) {
 					catchArgs = false;
 				}
@@ -871,7 +958,7 @@ function getRpcMethodHelp(methodName) {
 			var args = [];
 			var argX = null;
 			// looking for line starting with "N. " where N is an integer (1-2 digits)
-			argumentLines.forEach(function(line) {
+			argumentLines.forEach(function (line) {
 				var regex = /^([0-9]+)\.\s*"?(\w+)"?\s*\(([^,)]*),?\s*([^,)]*),?\s*([^,)]*),?\s*([^,)]*)?\s*\)\s*(.+)?$/;
 
 				var match = regex.exec(line);
@@ -915,16 +1002,16 @@ function getRpcMethodHelp(methodName) {
 
 			resolve(output);
 
-		}).catch(function(err) {
+		}).catch(function (err) {
 			reject(err);
 		});
 	});
 }
 
 function logCacheSizes() {
-	var itemCounts = [ miscCache.itemCount, blockCache.itemCount, txCache.itemCount ];
-	
-	var stream = fs.createWriteStream("memoryUsage.csv", {flags:'a'});
+	var itemCounts = [miscCache.itemCount, blockCache.itemCount, txCache.itemCount];
+
+	var stream = fs.createWriteStream("memoryUsage.csv", { flags: 'a' });
 	stream.write("itemCounts: " + JSON.stringify(itemCounts) + "\n");
 	stream.end();
 }
