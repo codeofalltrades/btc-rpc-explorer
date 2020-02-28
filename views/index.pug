@@ -14,28 +14,12 @@ block content
 				li If you just started your node, it may still be initializing.
 				li If your node is already initialized, check your RPC connection info.
 	else
-
-		- var networkSummaryItemCount = 4;
-
-		if (getblockchaininfo.size_on_disk)
-			- networkSummaryItemCount++;
-
-		if (global.exchangeRates)
-			- networkSummaryItemCount++;
-
-		if (txStats)
-			- networkSummaryItemCount++;
-
-		- var networkSummaryColumnClass = "col-md-4";
-		if (networkSummaryItemCount > 6)
-			- networkSummaryColumnClass = "col-md-3";
-			
 		div(class="card mb-4 shadow-sm")
 			div(class="card-header")
 				h2(class="h6 mb-0") Network Summary
 			div(class="card-body")
 				div(class="row")
-					div(class=networkSummaryColumnClass)
+					div(class="col-md-3")
 						div(class="float-left", style="height: 40px; width: 40px; font-size: 12px;")
 							span
 								i(class="fas fa-globe fa-2x mr-2", style="margin-top: 6px;")
@@ -45,102 +29,72 @@ block content
 						p(class="lead")
 							span #{getblockchaininfo.blocks.toLocaleString()}
 
-					div(class=networkSummaryColumnClass)
+					div(class="col-md-5")
 						div(class="float-left", style="height: 40px; width: 40px; font-size: 12px;")
 							span
 								i(class="fas fa-hashtag fa-2x mr-2", style="margin-top: 6px;")
 
 						span(class="font-weight-bold") Best Block Hash
 
-						p(class="lead")
-							div(class="text-overflow-ellipsis" data-toggle="tooltip", title=getblockchaininfo.bestblockhash) #{getblockchaininfo.bestblockhash}
+						p(class="lead text-overflow-ellipsis" data-toggle="tooltip", title=getblockchaininfo.bestblockhash)
+							span #{getblockchaininfo.bestblockhash}
 
-					div(class=networkSummaryColumnClass)
+					div(class="col-md-4")
 						div(class="float-left", style="height: 40px; width: 40px;")
 							span
-								i(class="fas fa-tachometer-alt fa-2x mr-2", style="margin-top: 6px;")
-						- var hashrateData = utils.formatLargeNumber(miningInfo.networkhashps, 3);
-						
-						span(class="font-weight-bold") Hashrate
+								i(class="fas fa-clock fa-2x mr-2", style="margin-top: 6px;")
+						span(class="font-weight-bold") Last Block Time
 
 						p(class="lead")
-							span #{hashrateData[0]}
+							span #{new Date(getblockchaininfo.mediantime*1000).toUTCString()}
 
-					div(class=networkSummaryColumnClass)
+					div(class="col-md-3")
 						div(class="float-left", style="height: 40px; width: 40px; font-size: 12px;")
 							span
 								i(class="fas fa-dumbbell fa-2x mr-2", style="margin-top: 6px;")
 
 						- var difficultyData = getblockchaininfo.difficulty_pos;
 
-						span(class="font-weight-bold") PoS Difficulty
+						span(class="font-weight-bold") PoS Diff
 
 						p(class="lead")
 							span #{difficultyData}
 
-					div(class=networkSummaryColumnClass)
+					div(class="col-md-3")
 						div(class="float-left", style="height: 40px; width: 40px; font-size: 12px;")
 							span
 								i(class="fas fa-dumbbell fa-2x mr-2", style="margin-top: 6px;")
 
-						- var difficultyDataPoW = getblockchaininfo.difficulty_pow;
+						- var difficultyData3 = getblockchaininfo.difficulty_pow;
 
-						span(class="font-weight-bold") PoW Difficulty
+						span(class="font-weight-bold") ProgPow Diff
 
 						p(class="lead")
-							span #{difficultyDataPoW}
+							span #{difficultyData3}
 
-					div(class=networkSummaryColumnClass)
-						div(class="float-left", style="height: 40px; width: 40px;")
+					div(class="col-md-3")
+						div(class="float-left", style="height: 40px; width: 40px; font-size: 12px;")
 							span
-								i(class="fas fa-unlock-alt fa-2x mr-2", style="margin-top: 6px; margin-left: 3px;")
+								i(class="fas fa-dumbbell fa-2x mr-2", style="margin-top: 6px;")
 
-						span(class="font-weight-bold") Unconfirmed Transactions
+						- var difficultyData1 = getblockchaininfo.difficulty_pow;
 
-						p(class="lead") #{mempoolInfo.size.toLocaleString()} tx 
-							- var mempoolBytesData = utils.formatLargeNumber(mempoolInfo.usage, 2);
-							small(class="text-muted font-weight-light") (#{mempoolBytesData[0]} #{mempoolBytesData[1].abbreviation}B)
+						span(class="font-weight-bold") RandomX Diff
 
-					div(class=networkSummaryColumnClass)
-						div(class="float-left", style="height: 40px; width: 40px;")
-							span
-								i(class="fas fa-bolt fa-2x mr-2", style="margin-top: 6px; margin-left: 6px;")
-
-						- var chainworkData = utils.formatLargeNumber(parseInt("0x" + getblockchaininfo.chainwork), 2);
-						span(class="font-weight-bold") Chainwork
-						
 						p(class="lead")
-							span.mr-2.border-dotted(data-toggle="tooltip", title=getblockchaininfo.chainwork.replace(/^0+/, ''))
-								span #{chainworkData[0]}
-								span  x 10
-								sup #{chainworkData[1].exponent}
-								span  hashes
+							span #{difficultyData1}
 
-					if (getblockchaininfo.size_on_disk)
-						div(class=networkSummaryColumnClass)
-							div(class="float-left", style="height: 40px; width: 40px;")
-								span
-									i(class="fas fa-database fa-2x mr-2", style="margin-top: 6px; margin-left: 3px;")
-							span(class="font-weight-bold") Blockchain Size
+					div(class="col-md-3")
+						div(class="float-left", style="height: 40px; width: 40px; font-size: 12px;")
+							span
+								i(class="fas fa-dumbbell fa-2x mr-2", style="margin-top: 6px;")
 
-							- var sizeData = utils.formatLargeNumber(getblockchaininfo.size_on_disk, 2);
-							p(class="lead") #{sizeData[0]} #{sizeData[1].abbreviation}B
+						- var difficultyData2 = getblockchaininfo.difficulty_pow;
 
-					if (global.exchangeRates)
-						div(class=networkSummaryColumnClass)
-							div(class="float-left", style="height: 40px; width: 40px; font-size: 12px;")
-								span
-									i(class="fas fa-money-bill-wave-alt fa-2x mr-2", style="margin-top: 7px;")
+						span(class="font-weight-bold") SHA256D Diff
 
-							span.font-weight-bold.border-dotted(data-toggle="tooltip", title=("Exchange-rate data from: " + coinConfig.exchangeRateData.jsonUrl)) Exchange Rate 
-
-							if (global.exchangeRates)
-								p(class="lead") #{utils.formatValueInActiveCurrency(1.0)}
-									small.text-muted.font-weight-light  (#{utils.satoshisPerUnitOfActiveCurrency()})
-
-							else
-								p(class="lead") -
-
+						p(class="lead")
+							span  #{difficultyData2}
 
 		include includes/tools-card.pug
 		
@@ -157,6 +111,31 @@ block content
 							span(style="float: right;")
 								a(href="/blocks")
 									span  Browse Blocks &raquo;
+
+				div(class="row" style="padding-top: 7px; background-color: rgba(0, 0, 0, 0.1);")
+					div(class="col-3 text-center")
+						span(class="font-weight-bold") PoS (24hr)
+
+						p(class="lead")
+							span #{720} - #{50}%
+
+					div(class="col-3 text-center")
+						span(class="font-weight-bold") ProgPow (24hr)
+
+						p(class="lead")
+							span #{504} - #{35}%
+
+					div(class="col-3 text-center")
+						span(class="font-weight-bold") RandomX (24hr)
+
+						p(class="lead")
+							span #{144} - #{10}%
+
+					div(class="col-3 text-center")
+						span(class="font-weight-bold") SHA256D (24hr)
+
+						p(class="lead")
+							span #{72} - #{5}%
 
 				div(class="card-body")
 
@@ -204,4 +183,3 @@ block content
 
 								- var graphData = {id:"graphRateDay", dataVar:"txRateDataDay", labels:txStats.txCountStats.txLabels, title:"Tx Rate, 24hr", xaxisTitle:"Block", xaxisStep:5, yaxisTitle:"Tx Per Sec"};
 								include ./includes/line-graph.pug
-											
