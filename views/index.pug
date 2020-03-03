@@ -65,7 +65,7 @@ block content
 							span
 								i(class="fas fa-bolt fa-2x mr-2", style="margin-top: 6px;")
 
-						- var difficultyData3 = getblockchaininfo.difficulty_pow;
+						- var difficultyData3 = algoChainStats.progPowDiff;
 
 						span(class="font-weight-bold") ProgPow Diff
 
@@ -77,29 +77,29 @@ block content
 							span
 								i(class="fas fa-bolt fa-2x mr-2", style="margin-top: 6px;")
 
-						- var difficultyData1 = getblockchaininfo.difficulty_pow;
+						- var dRandomxDiff = algoChainStats.randomxDiff;
 
 						span(class="font-weight-bold") RandomX Diff
 
 						p(class="lead")
-							span #{difficultyData1}
+							span #{dRandomxDiff}
 
 					div(class="col-md-3")
 						div(class="float-left", style="height: 40px; width: 40px; font-size: 12px;")
 							span
 								i(class="fas fa-bolt fa-2x mr-2", style="margin-top: 6px;")
 
-						- var difficultyData2 = getblockchaininfo.difficulty_pow;
+						- var dSha256dDiff = algoChainStats.sha256dDiff;
 
 						span(class="font-weight-bold") SHA256D Diff
 
 						p(class="lead")
-							span  #{difficultyData2}
+							span  #{dSha256dDiff}
 
 		include includes/tools-card.pug
 		
 		if (latestBlocks)
-			div(class="card mb-4 shadow-sm")
+			div(class="card mb-4 shadow-sm mb-4-no-bottom")
 				div(class="card-header")
 					div(class="row")
 						div(class="col")
@@ -111,31 +111,31 @@ block content
 							span(style="float: right;")
 								a(href="/blocks")
 									span  Browse Blocks &raquo;
-
-				div(class="row" style="padding-top: 7px; background-color: rgba(0, 0, 0, 0.1);")
+			if(algoChainStats)
+				div(class="row" style="padding-top: 0.4rem !important; background-color: rgba(0, 0, 0, 0.1);")
 					div(class="col-3 text-center")
 						span(class="font-weight-bold") PoS (24hr)
 
 						p(class="lead")
-							span #{720} - #{50}%
+							span #{algoChainStats.posCount} - #{algoChainStats.posPercent}%
 
 					div(class="col-3 text-center")
 						span(class="font-weight-bold") ProgPow (24hr)
 
 						p(class="lead")
-							span #{504} - #{35}%
+							span #{algoChainStats.progPowCount} - #{algoChainStats.progPowPercent}%
 
 					div(class="col-3 text-center")
 						span(class="font-weight-bold") RandomX (24hr)
 
 						p(class="lead")
-							span #{144} - #{10}%
+							span #{algoChainStats.randomxCount} - #{algoChainStats.randomxPercent}%
 
 					div(class="col-3 text-center")
 						span(class="font-weight-bold") SHA256D (24hr)
 
 						p(class="lead")
-							span #{72} - #{5}%
+							span #{algoChainStats.sha256dCount} - #{algoChainStats.sha256dPercent}%
 
 				div(class="card-body")
 

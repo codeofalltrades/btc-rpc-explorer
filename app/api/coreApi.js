@@ -70,9 +70,6 @@ if (redisCache.active) {
 	txCache = redisCache;
 }
 
-
-
-
 function getGenesisBlockHash() {
 	return coins[config.coin].genesisBlockHashesByNetwork[global.activeBlockchain];
 }
@@ -80,8 +77,6 @@ function getGenesisBlockHash() {
 function getGenesisCoinbaseTransactionId() {
 	return coins[config.coin].genesisCoinbaseTransactionIdsByNetwork[global.activeBlockchain];
 }
-
-
 
 function tryCacheThenRpcApi(cache, cacheKey, cacheMaxAge, rpcApiFunction, cacheConditionFunction) {
 	//debugLog("tryCache: " + cacheKey + ", " + cacheMaxAge);
@@ -140,8 +135,6 @@ function shouldCacheTransaction(tx) {
 
 	return true;
 }
-
-
 
 function getBlockchainInfo() {
 	return tryCacheThenRpcApi(miscCache, "getBlockchainInfo", 10000, rpcApi.getBlockchainInfo);
@@ -929,6 +922,73 @@ function logCacheSizes() {
 	stream.end();
 }
 
+function getChainAlgoStats() {
+	return new Promise(function (resolve, reject) {
+		getBlockchainInfo().then(function (getblockchaininfo) {
+			var blockStart = 0;
+			var blockEnd = getblockchaininfo.blocks;
+
+			if (blockEnd > 1440) {
+				blockStart = blockEnd - 1440;
+			}
+
+			if (blockEnd === 0) {
+				reject(`Error 37rhw0e7ufdsgf: blockStart and blockEnd are both zero)`);
+				return;
+			}
+
+			var promises = [];
+			for (var ib = blockEnd; ib >= blockStart; ib--) {
+				promises.push(getBlockByHeight(ib));
+			}
+
+			Promise.all(promises).then(function (results) {
+				var chainStats = {
+					startHeight: blockStart,
+					endHeight: blockEnd,
+					posCount: 0,
+					posDiff: 0.0,
+					posPercent: 0.0,
+					progPowCount: 0,
+					progPowDiff: 0.0,
+					progPowPercent: 0.0,
+					randomxCount: 0,
+					randomxDiff: 0.0,
+					randomxPercent: 0.0,
+					sha256dCount: 0,
+					sha256dDiff: 0.0,
+					sha256dPercent: 0.0
+				};
+
+				for (var i = results.length - 1; i >= 0; i--) {
+					switch (results[i].proof_type.toLowerCase()) {
+						case 'proof-of-work (sha256d)':
+							chainStats.sha256dCount++;
+							if (chainStats.sha256dDiff === 0.0) { chainStats.sha256dDiff = results[i].difficulty; }
+							break;
+						case 'proof-of-work (randomx)':
+							chainStats.randomxCount++;
+							if (chainStats.randomxDiff === 0.0) { chainStats.randomxDiff = results[i].difficulty; }
+							break;
+						case 'proof-of-work (progpow)':
+							chainStats.progPowCount++;
+							if (chainStats.progPowDiff === 0.0) { chainStats.progPowDiff = results[i].difficulty; }
+							break;
+						default:
+							chainStats.posCount++;
+							if (chainStats.posDiff === 0.0) { chainStats.posDiff = results[i].difficulty; }
+					}
+				}
+
+				resolve({ chainAlgoStats: chainStats});
+
+			}).catch(function (err) {
+				reject(err);
+			});
+		});
+	});
+}
+
 module.exports = {
 	getGenesisBlockHash: getGenesisBlockHash,
 	getGenesisCoinbaseTransactionId: getGenesisCoinbaseTransactionId,
@@ -956,5 +1016,6 @@ module.exports = {
 	getPeerSummary: getPeerSummary,
 	getChainTxStats: getChainTxStats,
 	getMempoolDetails: getMempoolDetails,
-	getTxCountStats: getTxCountStats
+	getTxCountStats: getTxCountStats,
+	getChainAlgoStats: getChainAlgoStats
 };

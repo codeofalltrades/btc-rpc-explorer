@@ -266,3 +266,7 @@ footer a:hover {
 	text-overflow: ellipsis;
 	white-space: nowrap;
 }
+
+.mb-4-no-bottom {
+	margin-bottom: 0 !important;
+}
