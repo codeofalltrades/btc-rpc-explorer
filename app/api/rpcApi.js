@@ -106,10 +106,10 @@ function getChainTxStats(blockCount) {
 	return getRpcDataWithParams({method:"getchaintxstats", parameters:[blockCount]});
 }
 
-function getBlockByHeight(blockHeight) {
+function getBlockByHeight(blockHeight, includeTxs) {
 	return new Promise(function(resolve, reject) {
 		getRpcDataWithParams({method:"getblockhash", parameters:[blockHeight]}).then(function(blockhash) {
-			getBlockByHash(blockhash).then(function(block) {
+			getBlockByHash(blockhash, includeTxs).then(function(block) {
 				resolve(block);
 
 			}).catch(function(err) {
@@ -121,21 +121,25 @@ function getBlockByHeight(blockHeight) {
 	});
 }
 
-function getBlockByHash(blockHash) {
+function getBlockByHash(blockHash, includeTxs) {
 	debugLog("getBlockByHash: %s", blockHash);
 
 	return new Promise(function(resolve, reject) {
-		getRpcDataWithParams({method:"getblock", parameters:[blockHash]}).then(function(block) {
-			getRawTransaction(block.tx[0]).then(function(tx) {
-				block.coinbaseTx = tx;
-				block.totalFees = utils.getBlockTotalFeesFromCoinbaseTxAndBlockHeight(tx, block.height);
-				block.miner = utils.getMinerFromCoinbaseTx(tx);
+		getRpcDataWithParams({ method: "getblock", parameters: [blockHash] }).then(function (block) {
+			if (includeTxs) {
+				getRawTransaction(block.tx[0]).then(function (tx) {
+					block.coinbaseTx = tx;
+					block.totalFees = utils.getBlockTotalFeesFromCoinbaseTxAndBlockHeight(tx, block.height);
+					block.miner = utils.getMinerFromCoinbaseTx(tx);
 
+					resolve(block);
+
+				}).catch(function (err) {
+					reject(err);
+				});
+			} else {
 				resolve(block);
-
-			}).catch(function(err) {
-				reject(err);
-			});
+			}			
 		}).catch(function(err) {
 			reject(err);
 		});

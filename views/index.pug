@@ -110,42 +110,41 @@ block content
 						div(class="col")
 							span(style="float: right;")
 								a(href="/blocks")
-									span  Browse Blocks &raquo;
-			if(algoChainStats)
-				div(class="row" style="padding-top: 0.4rem !important; background-color: rgba(0, 0, 0, 0.1);")
-					div(class="col-3 text-center")
-						span(class="font-weight-bold") PoS (24hr)
-
-						p(class="lead")
-							span #{algoChainStats.posCount} - #{algoChainStats.posPercent}%
-
-					div(class="col-3 text-center")
-						span(class="font-weight-bold") ProgPow (24hr)
-
-						p(class="lead")
-							span #{algoChainStats.progPowCount} - #{algoChainStats.progPowPercent}%
-
-					div(class="col-3 text-center")
-						span(class="font-weight-bold") RandomX (24hr)
-
-						p(class="lead")
-							span #{algoChainStats.randomxCount} - #{algoChainStats.randomxPercent}%
-
-					div(class="col-3 text-center")
-						span(class="font-weight-bold") SHA256D (24hr)
-
-						p(class="lead")
-							span #{algoChainStats.sha256dCount} - #{algoChainStats.sha256dPercent}%
+									span  Browse Blocks &raquo;				
 
 				div(class="card-body")
+					div(class="row" style="padding-top: 0.4rem !important; background-color: rgba(0, 0, 0, 0.1);")
+						div(class="col-3 text-center")
+							span(class="font-weight-bold") PoS (24hr)
 
-					- var blocks = latestBlocks;
-					- var blockOffset = 0;
+							p(class="lead")
+								span #{algoChainStats.posCount} - #{algoChainStats.posPercent}%
 
-					include includes/blocks-list.pug
+						div(class="col-3 text-center")
+							span(class="font-weight-bold") ProgPow (24hr)
 
+							p(class="lead")
+								span #{algoChainStats.progPowCount} - #{algoChainStats.progPowPercent}%
+
+						div(class="col-3 text-center")
+							span(class="font-weight-bold") RandomX (24hr)
+
+							p(class="lead")
+								span #{algoChainStats.randomxCount} - #{algoChainStats.randomxPercent}%
+
+						div(class="col-3 text-center")
+							span(class="font-weight-bold") SHA256D (24hr)
+
+							p(class="lead")
+								span #{algoChainStats.sha256dCount} - #{algoChainStats.sha256dPercent}%
+
+						- var blocks = latestBlocks;
+						- var blockOffset = 0;
+
+						include includes/blocks-list.pug
 
 		if (txStats)
+			<br>
 			div(class="card mb-4 shadow-sm")
 				div(class="card-header")
 					div(class="row")

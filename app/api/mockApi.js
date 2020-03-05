@@ -36,7 +36,7 @@ function getRawMempool() {
 	return getRpcDataWithParams("getrawmempool", true);
 }
 
-function getBlockByHeight(blockHeight) {
+function getBlockByHeight(blockHeight, includeTxs) {
 	var txCount = utils.seededRandomIntBetween(blockHeight, 1, 20);
 	var txids = [];
 	for (var i = 0; i < txCount; i++) {
@@ -72,7 +72,7 @@ function getBlocksByHeight(blockHeights) {
 	return new Promise(function(resolve, reject) {
 		var blocks = [];
 		for (var i = 0; i < blockHeights.length; i++) {
-			getBlockByHeight(blockHeights[i]).then(function(result) {
+			getBlockByHeight(blockHeights[i], true).then(function(result) {
 				blocks.push(result);
 			});
 			/*blocks.push({
@@ -107,7 +107,7 @@ function getBlocksByHeight(blockHeights) {
 	});
 }
 
-function getBlockByHash(blockHash) {
+function getBlockByHash(blockHash, includeTxs) {
 	return new Promise(function(resolve, reject) {
 		resolve({
 			"hash": blockHash,
