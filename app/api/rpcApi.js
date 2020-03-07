@@ -122,7 +122,7 @@ function getBlockByHeight(blockHeight, includeTxs) {
 }
 
 function getBlockByHash(blockHash, includeTxs) {
-	debugLog("getBlockByHash: %s", blockHash);
+	//debugLog("getBlockByHash: %s", blockHash);
 
 	return new Promise(function(resolve, reject) {
 		getRpcDataWithParams({ method: "getblock", parameters: [blockHash] }).then(function (block) {
@@ -317,7 +317,7 @@ function getRpcData(cmd) {
 
 function getRpcDataWithParams(request) {
 	return new Promise(function(resolve, reject) {
-		debugLog(`RPC: ${JSON.stringify(request)}`);
+		//debugLog(`RPC: ${JSON.stringify(request)}`);
 
 		rpcCall = function(callback) {
 			global.rpcClient.command([request], function(err, result, resHeaders) {

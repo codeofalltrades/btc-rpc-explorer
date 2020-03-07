@@ -44,74 +44,28 @@ router.get("/", function (req, res, next) {
 
 	res.locals.homepage = true;
 
-	coreApi.getChainAlgoStats().then(function (data) {
-		res.locals.algoChainStats = data.chainAlgoStats;
-	}).catch(function (err) {
-		console.log("Error: " + err);
-	});
+	//coreApi.getChainAlgoStats().then(function (data) {
+	//	res.locals.algoChainStats = data.chainAlgoStats;
+	//}).catch(function (err) {
+	//	console.log("Error: " + err);
+	//});
 
 	var promises = [];
-
 	promises.push(coreApi.getMempoolInfo());
 	promises.push(coreApi.getMiningInfo());
+	promises.push(coreApi.getLastPowHashRates());
 
 	coreApi.getBlockchainInfo().then(function (getblockchaininfo) {
 		res.locals.getblockchaininfo = getblockchaininfo;
 
-		//if (getblockchaininfo.chain !== 'regtest') {
-		//	var targetBlocksPerDay = 24 * 60 * 60 / global.coinConfig.targetBlockTimeSeconds;
+		Promise.all(promises).then(function (promiseResults) {
+			res.locals.mempoolInfo = promiseResults[0];
+			res.locals.miningInfo = promiseResults[1];
+			res.locals.algoDiffStats = promiseResults[2];
 
-		//	promises.push(coreApi.getTxCountStats(targetBlocksPerDay / 4, -targetBlocksPerDay, "latest"));
+			res.render("index");
 
-		//	var chainTxStatsIntervals = [targetBlocksPerDay, targetBlocksPerDay * 7, targetBlocksPerDay * 30, targetBlocksPerDay * 365]
-		//		.filter(numBlocks => numBlocks <= getblockchaininfo.blocks);
-
-		//	res.locals.chainTxStatsLabels = ["24 hours", "1 week", "1 month", "1 year"]
-		//		.slice(0, chainTxStatsIntervals.length)
-		//		.concat("All time");
-
-		//	for (var i = 0; i < chainTxStatsIntervals.length; i++) {
-		//		promises.push(coreApi.getChainTxStats(chainTxStatsIntervals[i]));
-		//	}
-		//}
-
-		var blockHeights = [];
-		if (getblockchaininfo.blocks) {
-			for (var bid = 0; bid < 10; bid++) {
-				blockHeights.push(getblockchaininfo.blocks - bid);
-			}
-		} else if (global.activeBlockchain === "regtest") {
-			// hack: default regtest node returns getblockchaininfo.blocks=0, despite having a genesis block
-			// hack this to display the genesis block
-			blockHeights.push(0);
-		}
-
-		if (getblockchaininfo.chain !== 'regtest') {
-			promises.push(coreApi.getChainTxStats(getblockchaininfo.blocks - 1));
-		}
-
-		coreApi.getBlocksByHeight(blockHeights).then(function (latestBlocks) {
-			res.locals.latestBlocks = latestBlocks;
-
-			Promise.all(promises).then(function (promiseResults) {
-				res.locals.mempoolInfo = promiseResults[0];
-				res.locals.miningInfo = promiseResults[1];
-
-				//if (getblockchaininfo.chain !== 'regtest') {
-				//	res.locals.txStats = promiseResults[2];
-
-				//	var chainTxStats = [];
-				//	for (var i = 0; i < res.locals.chainTxStatsLabels.length; i++) {
-				//		chainTxStats.push(promiseResults[i + 3]);
-				//	}
-
-				//	res.locals.chainTxStats = chainTxStats;
-				//}
-
-				res.render("index");
-
-				next();
-			});
+			next();
 		});
 	}).catch(function (err) {
 		res.locals.userMessage = "Error loading recent blocks: " + err;
@@ -119,6 +73,12 @@ router.get("/", function (req, res, next) {
 		res.render("index");
 
 		next();
+	});
+});
+
+router.get("/algo-stats", function (req, res, next) {
+	coreApi.getChainAlgoStats().then(function (chainStats) {
+		res.locals.algoChainStats = chainStats;
 	});
 });
 
@@ -1224,7 +1184,7 @@ router.get("/fun", function (req, res, next) {
 });
 
 router.get("/api/:rpcCmd/", function (req, res, next) {
-	coreApi.getPeerSummary().then(function (peerSummary) {			
+	coreApi.getPeerSummary().then(function (peerSummary) {
 		res.json("peers");
 		next();
 	}).catch(function (err) {
