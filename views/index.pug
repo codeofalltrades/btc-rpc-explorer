@@ -29,7 +29,7 @@ block content
 						p(class="lead")
 							span #{getblockchaininfo.blocks.toLocaleString()}
 
-					div(class="col-md-5")
+					div(class="col-md-3")
 						div(class="float-left", style="height: 40px; width: 40px; font-size: 12px;")
 							span
 								i(class="fas fa-hashtag fa-2x mr-2", style="margin-top: 6px;")
@@ -39,7 +39,7 @@ block content
 						p(class="lead text-overflow-ellipsis" data-toggle="tooltip", title=getblockchaininfo.bestblockhash)
 							span #{getblockchaininfo.bestblockhash}
 
-					div(class="col-md-4")
+					div(class="col-md-3")
 						div(class="float-left", style="height: 40px; width: 40px;")
 							span
 								i(class="fas fa-clock fa-2x mr-2", style="margin-top: 6px;")
@@ -95,6 +95,35 @@ block content
 
 						p(class="lead")
 							span  #{dSha256dDiff}
+
+		div(class="card mb-4 shadow-sm")
+			div(class="card-header")
+				h2(class="h6 mb-0") Veil Supply
+			div(class="card-body")
+				div(class="row")
+					div(class="col-md-3")
+						div(class="float-left", style="height: 40px; width: 40px; font-size: 12px;")
+							span
+								i(class="fas fa-bolt fa-2x mr-2", style="margin-top: 6px;")
+
+						- var dMoneySupply = getblockchaininfo.moneysupply_formatted;
+
+						span(class="font-weight-bold") Total Supply
+
+						p(class="lead")
+							span #{dMoneySupply}
+
+					div(class="col-md-3")
+						div(class="float-left", style="height: 40px; width: 40px; font-size: 12px;")
+							span
+								i(class="fas fa-bolt fa-2x mr-2", style="margin-top: 6px;")
+
+						- var dZerocoinSupplyTotal = getblockchaininfo.moneysupply_formatted;
+
+						span(class="font-weight-bold") Zerocoin Supply Total
+
+						p(class="lead")
+							span #{dZerocoinSupplyTotal}
 
 		include includes/tools-card.pug
 		
