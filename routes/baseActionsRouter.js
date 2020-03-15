@@ -53,7 +53,6 @@ router.get("/", function (req, res, next) {
 	var promises = [];
 	promises.push(coreApi.getMempoolInfo());
 	promises.push(coreApi.getMiningInfo());
-	promises.push(coreApi.getLastPowHashRates());
 
 	coreApi.getBlockchainInfo().then(function (getblockchaininfo) {
 		res.locals.getblockchaininfo = getblockchaininfo;
@@ -61,7 +60,6 @@ router.get("/", function (req, res, next) {
 		Promise.all(promises).then(function (promiseResults) {
 			res.locals.mempoolInfo = promiseResults[0];
 			res.locals.miningInfo = promiseResults[1];
-			res.locals.algoDiffStats = promiseResults[2];
 
 			res.render("index");
 

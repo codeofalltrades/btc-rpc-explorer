@@ -922,75 +922,6 @@ function logCacheSizes() {
 	stream.end();
 }
 
-function getLastPowHashRates() {
-	return new Promise(function (resolve, reject) {
-		getBlockchainInfo().then(function (getblockchaininfo) {
-			var blockStart = 0;
-			var blockEnd = getblockchaininfo.blocks;
-
-			var bAllAlgosFound = false;
-			do {
-
-				if (blockEnd > 60) {
-					blockStart = blockEnd - 60;
-				}
-
-				if (blockEnd === 0) {
-					reject(`Error 37rhw0e7ufdsgf: blockEnd is zero)`);
-					return;
-				}
-				debugLog(`start block: ${blockStart}`);
-				debugLog(`end block: ${blockEnd}`);
-
-				var promisesInner = [];
-				for (var iCurrentBlock = blockStart; iCurrentBlock <= blockEnd; iCurrentBlock++) {
-					promisesInner.push(getBlockByHeight(iCurrentBlock, false));
-				}
-
-				debugLog(`promisesInner start`);
-				Promise.all(promisesInner).then(function (results) {
-					debugLog(`promisesInner resolve`);
-					var chainStats = {
-						startHeight: blockStart,
-						endHeight: blockEnd,
-						posDiff: 0.0,
-						progPowDiff: 0.0,
-						randomxDiff: 0.0,
-						sha256dDiff: 0.0
-					};
-
-					for (var i = results.length - 1; i >= 0; i--) {
-						switch (results[i].proof_type.toLowerCase()) {
-							case 'proof-of-work (sha256d)':
-								if (chainStats.sha256dDiff === 0.0) { chainStats.sha256dDiff = results[i].difficulty; }
-								break;
-							case 'proof-of-work (randomx)':
-								if (chainStats.randomxDiff === 0.0) { chainStats.randomxDiff = results[i].difficulty; }
-								break;
-							case 'proof-of-work (progpow)':
-								if (chainStats.progPowDiff === 0.0) { chainStats.progPowDiff = results[i].difficulty; }
-								break;
-							default:
-								if (chainStats.posDiff === 0.0) { chainStats.posDiff = results[i].difficulty; }
-						}
-
-						if (chainStats.progPowDiff !== 0.0 && chainStats.randomxDiff !== 0.0 && chainStats.sha256dDiff !== 0.0) {
-							break;
-						}
-					}
-
-					debugLog(`promisesInner complete`);
-
-					resolve({ chainAlgoStats: chainStats });
-					bAllAlgosFound = chainStats.progPowDiff === 0.0 | chainStats.randomxDiff === 0.0 | chainStats.sha256dDiff === 0.0;
-				}).catch(function (err) {
-					reject(err);
-				});
-			} while (!bAllAlgosFound);
-		});
-	});
-}
-
 function getChainAlgoStats() {
 	return new Promise(function (resolve, reject) {
 		getBlockchainInfo().then(function (getblockchaininfo) {
@@ -1099,6 +1030,5 @@ module.exports = {
 	getChainTxStats: getChainTxStats,
 	getMempoolDetails: getMempoolDetails,
 	getTxCountStats: getTxCountStats,
-	getChainAlgoStats: getChainAlgoStats,
-	getLastPowHashRates: getLastPowHashRates
+	getChainAlgoStats: getChainAlgoStats
 };

@@ -65,19 +65,19 @@ block content
 							span
 								i(class="fas fa-bolt fa-2x mr-2", style="margin-top: 6px;")
 
-						- var difficultyData3 = algoDiffStats.progPowDiff;
+						- var dProgPowDiff = getblockchaininfo.difficulty_progpow;
 
 						span(class="font-weight-bold") ProgPow Diff
 
 						p(class="lead")
-							span #{difficultyData3}
+							span #{dProgPowDiff}
 
 					div(class="col-md-3")
 						div(class="float-left", style="height: 40px; width: 40px; font-size: 12px;")
 							span
 								i(class="fas fa-bolt fa-2x mr-2", style="margin-top: 6px;")
 
-						- var dRandomxDiff = algoDiffStats.randomxDiff;
+						- var dRandomxDiff = getblockchaininfo.difficulty_randomx;
 
 						span(class="font-weight-bold") RandomX Diff
 
@@ -89,7 +89,7 @@ block content
 							span
 								i(class="fas fa-bolt fa-2x mr-2", style="margin-top: 6px;")
 
-						- var dSha256dDiff = algoDiffStats.sha256dDiff;
+						- var dSha256dDiff = getblockchaininfo.difficulty_sha256d;
 
 						span(class="font-weight-bold") SHA256D Diff
 
@@ -110,38 +110,7 @@ block content
 						div(class="col")
 							span(style="float: right;")
 								a(href="/blocks")
-									span  Browse Blocks &raquo;				
-
-				div(class="card-body")
-					div(class="row" style="padding-top: 0.4rem !important; background-color: rgba(0, 0, 0, 0.1);")
-						div(class="col-3 text-center")
-							span(class="font-weight-bold") PoS (24hr)
-
-							p(class="lead")
-								span #{algoChainStats.posCount} - #{algoChainStats.posPercent}%
-
-						div(class="col-3 text-center")
-							span(class="font-weight-bold") ProgPow (24hr)
-
-							p(class="lead")
-								span #{algoChainStats.progPowCount} - #{algoChainStats.progPowPercent}%
-
-						div(class="col-3 text-center")
-							span(class="font-weight-bold") RandomX (24hr)
-
-							p(class="lead")
-								span #{algoChainStats.randomxCount} - #{algoChainStats.randomxPercent}%
-
-						div(class="col-3 text-center")
-							span(class="font-weight-bold") SHA256D (24hr)
-
-							p(class="lead")
-								span #{algoChainStats.sha256dCount} - #{algoChainStats.sha256dPercent}%
-
-						- var blocks = latestBlocks;
-						- var blockOffset = 0;
-
-						include includes/blocks-list.pug
+									span  Browse Blocks &raquo;
 
 		if (txStats)
 			<br>
