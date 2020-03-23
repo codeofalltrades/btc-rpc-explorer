@@ -19,17 +19,17 @@ block content
 				h2(class="h6 mb-0") Network Summary
 			div(class="card-body")
 				div(class="row")
-					div(class="col-md-3")
+					div(class="col-md-4")
 						div(class="float-left", style="height: 40px; width: 40px; font-size: 12px;")
 							span
 								i(class="fas fa-globe fa-2x mr-2", style="margin-top: 6px;")
 
 						span(class="font-weight-bold") Last Indexed Block
 
-						p(class="lead")
+						p(class="lead lead-small")
 							span #{getblockchaininfo.blocks.toLocaleString()}
 
-					div(class="col-md-3")
+					div(class="col-md-4")
 						div(class="float-left", style="height: 40px; width: 40px; font-size: 12px;")
 							span
 								i(class="fas fa-hashtag fa-2x mr-2", style="margin-top: 6px;")
@@ -37,15 +37,15 @@ block content
 						span(class="font-weight-bold") Best Block Hash
 
 						p(class="lead text-overflow-ellipsis" data-toggle="tooltip", title=getblockchaininfo.bestblockhash)
-							span #{getblockchaininfo.bestblockhash}
+							span(class="lead-small") #{getblockchaininfo.bestblockhash}
 
-					div(class="col-md-3")
+					div(class="col-md-4")
 						div(class="float-left", style="height: 40px; width: 40px;")
 							span
 								i(class="fas fa-clock fa-2x mr-2", style="margin-top: 6px;")
 						span(class="font-weight-bold") Last Block Time
 
-						p(class="lead")
+						p(class="lead lead-small")
 							span #{new Date(getblockchaininfo.mediantime*1000).toUTCString()}
 
 					div(class="col-md-3")
@@ -57,7 +57,7 @@ block content
 
 						span(class="font-weight-bold") PoS Diff
 
-						p(class="lead")
+						p(class="lead lead-small")
 							span #{difficultyData}
 
 					div(class="col-md-3")
@@ -69,7 +69,7 @@ block content
 
 						span(class="font-weight-bold") ProgPow Diff
 
-						p(class="lead")
+						p(class="lead lead-small")
 							span #{dProgPowDiff}
 
 					div(class="col-md-3")
@@ -81,7 +81,7 @@ block content
 
 						span(class="font-weight-bold") RandomX Diff
 
-						p(class="lead")
+						p(class="lead lead-small")
 							span #{dRandomxDiff}
 
 					div(class="col-md-3")
@@ -93,7 +93,7 @@ block content
 
 						span(class="font-weight-bold") SHA256D Diff
 
-						p(class="lead")
+						p(class="lead lead-small")
 							span  #{dSha256dDiff}
 
 		div(class="card mb-4 shadow-sm")
@@ -101,29 +101,60 @@ block content
 				h2(class="h6 mb-0") Veil Supply
 			div(class="card-body")
 				div(class="row")
-					div(class="col-md-3")
-						div(class="float-left", style="height: 40px; width: 40px; font-size: 12px;")
-							span
-								i(class="fas fa-bolt fa-2x mr-2", style="margin-top: 6px;")
+					div(class="col-md-6 text-center")
 
-						- var dMoneySupply = getblockchaininfo.moneysupply_formatted;
+							- var dMoneySupply = getblockchaininfo.moneysupply_formatted;
 
-						span(class="font-weight-bold") Total Supply
+							span(class="font-weight-bold") Total Supply
 
-						p(class="lead")
-							span #{dMoneySupply}
+							p(class="lead lead-small")
+								span #{dMoneySupply}
 
-					div(class="col-md-3")
-						div(class="float-left", style="height: 40px; width: 40px; font-size: 12px;")
-							span
-								i(class="fas fa-bolt fa-2x mr-2", style="margin-top: 6px;")
-
-						- var dZerocoinSupplyTotal = getblockchaininfo.moneysupply_formatted;
+					div(class="col-md-6 text-center")
+						- var dZerocoinSupplyTotal = getblockchaininfo.zerocoinsupply[4].amount;
+						- var dZerocoinSupplyTotalFormatted = (dZerocoinSupplyTotal == null) ? 0 : (dZerocoinSupplyTotal / 100000000).toFixed(2);
 
 						span(class="font-weight-bold") Zerocoin Supply Total
 
-						p(class="lead")
-							span #{dZerocoinSupplyTotal}
+						p(class="lead lead-small")
+							span #{dZerocoinSupplyTotalFormatted}
+
+				div(class="row")
+					div(class="col-md-3 text-center")
+	
+						- var d10Supply = getblockchaininfo.zerocoinsupply[0].amount_formatted;
+
+						span(class="font-weight-bold") 10-denom
+
+						p(class="lead lead-small")
+							span #{d10Supply}
+
+					div(class="col-md-3 text-center")
+
+						- var d100Supply = getblockchaininfo.zerocoinsupply[1].amount_formatted;
+
+						span(class="font-weight-bold") 100-denom
+
+						p(class="lead lead-small")
+							span #{d100Supply}
+
+					div(class="col-md-3 text-center")
+
+						- var d1000Supply = getblockchaininfo.zerocoinsupply[2].amount_formatted;
+
+						span(class="font-weight-bold") 1000-denom
+
+						p(class="lead lead-small")
+							span #{d1000Supply}
+
+					div(class="col-md-3 text-center")
+
+						- var d10000Supply = getblockchaininfo.zerocoinsupply[3].amount_formatted
+
+						span(class="font-weight-bold") 10000-denom
+
+						p(class="lead lead-small")
+							span #{d10000Supply}
 
 		include includes/tools-card.pug
 		
