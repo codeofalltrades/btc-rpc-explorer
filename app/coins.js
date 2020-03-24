@@ -1,6 +1,7 @@
 var btc = require("./coins/btc.js");
+var veil = require("./coins/veil.js");
 
 module.exports = {
-	"BTC": btc,
-	"coins":["BTC"]
+	"VEIL": veil,
+	"coins": ["VEIL"]
 };

@@ -5,7 +5,7 @@ var url = require('url');
 var coins = require("./coins.js");
 var credentials = require("./credentials.js");
 
-var currentCoin = process.env.BTCEXP_COIN || "BTC";
+var currentCoin = process.env.BTCEXP_COIN || "VEIL";
 
 var rpcCred = credentials.rpc;
 
@@ -181,10 +181,10 @@ module.exports = {
 
 	donations:{
 		addresses:{
-			coins:["BTC"],
-			sites:{"BTC":""},
+			coins:["VEIL"],
+			sites: {"VEIL":""},
 
-			"BTC":{address:""}
+			"VEIL":{address:""}
 		},
 		btcpayserver:{
 			host:"",
