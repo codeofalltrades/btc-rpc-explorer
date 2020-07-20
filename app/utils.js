@@ -361,7 +361,8 @@ function getTxTotalInputOutputValues(tx, txInputs, blockHeight) {
 		}
 		
 		for (var i = 0; i < tx.vout.length; i++) {
-			totalOutputValue = totalOutputValue.plus(new Decimal(tx.vout[i].value));
+			try {totalOutputValue = totalOutputValue.plus(new Decimal(tx.vout[i].value)); }
+			catch(e1){}
 		}
 	} catch (err) {
 		logError("2308sh0sg44", err, {tx:tx, txInputs:txInputs, blockHeight:blockHeight});

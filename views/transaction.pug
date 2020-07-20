@@ -28,15 +28,15 @@ block content
 		- var totalInputValue = new Decimal(0);
 		if (result.getrawtransaction.vin[0].coinbase)
 			- totalInputValue = totalInputValue.plus(new Decimal(coinConfig.blockRewardFunction(result.getblock.height, global.activeBlockchain)));
-		each txInput, txInputIndex in result.txInputs
-			if (txInput)
-				- var vout = txInput.vout[result.getrawtransaction.vin[txInputIndex].vout];
-				if (vout.value)
-					- totalInputValue = totalInputValue.plus(new Decimal(vout.value));
+		//each txInput, txInputIndex in result.txInputs
+			//if (txInput)
+			//	- var vout = txInput.vout[result.getrawtransaction.vin[txInputIndex].vout];
+			//	if (vout.value)
+				//	- totalInputValue = totalInputValue.plus(new Decimal(vout.value));
 
 		- var totalOutputValue = new Decimal(0);
 		each vout, voutIndex in result.getrawtransaction.vout
-			- totalOutputValue = totalOutputValue.plus(new Decimal(vout.value));
+			- try{totalOutputValue = totalOutputValue.plus(new Decimal(vout.value));}catch(ex1){}
 
 		div(class="tab-content")
 			div(id="tab-details", class="tab-pane active", role="tabpanel")

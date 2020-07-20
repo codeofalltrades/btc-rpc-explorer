@@ -42,15 +42,15 @@ router.get("/", function (req, res, next) {
 	}
 
 	res.locals.blockCounts = {};
-	res.locals.blockCounts.pos = 50;
+	res.locals.blockCounts.pos = 0;
 	res.locals.blockCounts.posPercent = (res.locals.blockCounts.pos / 1440).toFixed(2);
-	res.locals.blockCounts.progPow = 35;
+	res.locals.blockCounts.progPow = 0;
 	res.locals.blockCounts.progPowpercent = (res.locals.blockCounts.progPow / 1440).toFixed(2);
-	res.locals.blockCounts.randomx = 10
+	res.locals.blockCounts.randomx = 0;
 	res.locals.blockCounts.randomxPercent = (res.locals.blockCounts.randomx / 1440).toFixed(2);
-	res.locals.blockCounts.sha256d = 5;
+	res.locals.blockCounts.sha256d = 0;
 	res.locals.blockCounts.sha256dPercent = (res.locals.blockCounts.sha256d / 1440).toFixed(2);
-	res.locals.blockCounts.x16rt = 50;
+	res.locals.blockCounts.x16rt = 0;
 	res.locals.blockCounts.x16rtPercent = (res.locals.blockCounts.x16rt / 1440).toFixed(2);
 
 	//coreApi.getChainAlgoStats().then(function (data) {
