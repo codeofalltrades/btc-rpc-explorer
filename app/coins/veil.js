@@ -30,23 +30,7 @@ var currencyUnits = [
 		multiplier: 100000000,
 		values: ["sat", "satoshi"],
 		decimalPlaces: 0
-	},
-	{
-		type: "exchanged",
-		name: "USD",
-		multiplier: "usd",
-		values: ["usd"],
-		decimalPlaces: 2,
-		symbol: "$"
-	},
-	{
-		type: "exchanged",
-		name: "EUR",
-		multiplier: "eur",
-		values: ["eur"],
-		decimalPlaces: 2,
-		symbol: "€"
-	},
+	}
 ];
 
 module.exports = {

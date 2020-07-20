@@ -38,11 +38,20 @@ router.get("/", function (req, res, next) {
 
 		res.render("connect");
 		res.end();
-
 		return;
 	}
 
-	res.locals.homepage = true;
+	res.locals.blockCounts = {};
+	res.locals.blockCounts.pos = 50;
+	res.locals.blockCounts.posPercent = (res.locals.blockCounts.pos / 1440).toFixed(2);
+	res.locals.blockCounts.progPow = 35;
+	res.locals.blockCounts.progPowpercent = (res.locals.blockCounts.progPow / 1440).toFixed(2);
+	res.locals.blockCounts.randomx = 10
+	res.locals.blockCounts.randomxPercent = (res.locals.blockCounts.randomx / 1440).toFixed(2);
+	res.locals.blockCounts.sha256d = 5;
+	res.locals.blockCounts.sha256dPercent = (res.locals.blockCounts.sha256d / 1440).toFixed(2);
+	res.locals.blockCounts.x16rt = 50;
+	res.locals.blockCounts.x16rtPercent = (res.locals.blockCounts.x16rt / 1440).toFixed(2);
 
 	//coreApi.getChainAlgoStats().then(function (data) {
 	//	res.locals.algoChainStats = data.chainAlgoStats;
@@ -53,18 +62,33 @@ router.get("/", function (req, res, next) {
 	var promises = [];
 	promises.push(coreApi.getMempoolInfo());
 	promises.push(coreApi.getMiningInfo());
+	coreApi.getBlockchainInfo().then(function (chaininfo) {
+		res.locals.blockCount = chaininfo.blocks;
+		res.locals.blockOffset = chaininfo.offset;
+		res.locals.getblockchaininfo = chaininfo;
+		res.locals.nextSuperBlock = Math.floor((chaininfo.blocks / 43200)  + 1) * 43200
 
-	coreApi.getBlockchainInfo().then(function (getblockchaininfo) {
-		res.locals.getblockchaininfo = getblockchaininfo;
+		var blockHeights = [];
+		if (chaininfo.blocks) {
+			for (var i = 0; i < 5; i++) {
+				blockHeights.push(chaininfo.blocks - i);
+			}
+		} else if (global.activeBlockchain == "regtest") {
+			// hack: default regtest node returns getblockchaininfo.blocks=0, despite having a genesis block
+			// hack this to display the genesis block
+			blockHeights.push(0);
+		}
 
-		Promise.all(promises).then(function (promiseResults) {
+		promises.push(coreApi.getBlocksByHeight(blockHeights, true));
+
+		Promise.all(promises).then(function(promiseResults) {
 			res.locals.mempoolInfo = promiseResults[0];
 			res.locals.miningInfo = promiseResults[1];
-
+			res.locals.getblockchaininfo.latestBlocks = promiseResults[2];
 			res.render("index");
-
 			next();
 		});
+
 	}).catch(function (err) {
 		res.locals.userMessage = "Error loading recent blocks: " + err;
 
