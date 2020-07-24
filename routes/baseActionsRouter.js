@@ -40,28 +40,26 @@ router.get("/", function (req, res, next) {
 		res.end();
 		return;
 	}
-
-	res.locals.blockCounts = {};
-	res.locals.blockCounts.pos = 0;
-	res.locals.blockCounts.posPercent = (res.locals.blockCounts.pos / 1440).toFixed(2);
-	res.locals.blockCounts.progPow = 0;
-	res.locals.blockCounts.progPowpercent = (res.locals.blockCounts.progPow / 1440).toFixed(2);
-	res.locals.blockCounts.randomx = 0;
-	res.locals.blockCounts.randomxPercent = (res.locals.blockCounts.randomx / 1440).toFixed(2);
-	res.locals.blockCounts.sha256d = 0;
-	res.locals.blockCounts.sha256dPercent = (res.locals.blockCounts.sha256d / 1440).toFixed(2);
-	res.locals.blockCounts.x16rt = 0;
-	res.locals.blockCounts.x16rtPercent = (res.locals.blockCounts.x16rt / 1440).toFixed(2);
-
-	//coreApi.getChainAlgoStats().then(function (data) {
-	//	res.locals.algoChainStats = data.chainAlgoStats;
-	//}).catch(function (err) {
-	//	console.log("Error: " + err);
-	//});
+	coreApi.getBlockCount().then(function (algoInfo) {
+		res.locals.blockCounts = {};
+		res.locals.blockCounts.total = {};
+		res.locals.blockCounts.pos = algoInfo.pos;
+		res.locals.blockCounts.posPercent = ((parseInt(res.locals.blockCounts.pos) / 1440) * 100).toFixed(2);
+		res.locals.blockCounts.progpow = algoInfo.progpow;
+		res.locals.blockCounts.progPowPercent = ((parseInt(res.locals.blockCounts.progpow) / 1440) * 100).toFixed(2);
+		res.locals.blockCounts.randomx = algoInfo.randomx;
+		res.locals.blockCounts.randomxPercent = ((parseInt(res.locals.blockCounts.randomx) / 1440) * 100).toFixed(2);
+		res.locals.blockCounts.sha256d = algoInfo.sha256d;
+		res.locals.blockCounts.sha256dPercent = ((parseInt(res.locals.blockCounts.sha256d) / 1440) * 100).toFixed(2);
+		res.locals.blockCounts.x16rt = algoInfo.x16rt;
+		res.locals.blockCounts.x16rtPercent = ((parseInt(res.locals.blockCounts.x16rt) / 1440) * 100).toFixed(2);
+		res.locals.blockCounts.total = parseInt(algoInfo.pos) +  parseInt(algoInfo.progpow) +  parseInt(algoInfo.randomx) +  parseInt(algoInfo.sha256d) +  parseInt(algoInfo.x16rt);
+	});
 
 	var promises = [];
 	promises.push(coreApi.getMempoolInfo());
 	promises.push(coreApi.getMiningInfo());
+
 	coreApi.getBlockchainInfo().then(function (chaininfo) {
 		res.locals.blockCount = chaininfo.blocks;
 		res.locals.blockOffset = chaininfo.offset;

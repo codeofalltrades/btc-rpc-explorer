@@ -140,6 +140,10 @@ function getBlockchainInfo() {
 	return tryCacheThenRpcApi(miscCache, "getBlockchainInfo", 10000, rpcApi.getBlockchainInfo);
 }
 
+function getBlockCount() {
+	return tryCacheThenRpcApi(miscCache, "getBlockCount", 10000, rpcApi.getBlockCount);
+}
+
 function getNetworkInfo() {
 	return tryCacheThenRpcApi(miscCache, "getNetworkInfo", 10000, rpcApi.getNetworkInfo);
 }
@@ -1030,5 +1034,6 @@ module.exports = {
 	getChainTxStats: getChainTxStats,
 	getMempoolDetails: getMempoolDetails,
 	getTxCountStats: getTxCountStats,
-	getChainAlgoStats: getChainAlgoStats
+	getChainAlgoStats: getChainAlgoStats,
+	getBlockCount: getBlockCount
 };

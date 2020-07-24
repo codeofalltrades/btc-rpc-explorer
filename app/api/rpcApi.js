@@ -53,6 +53,10 @@ function getPeerInfo() {
 	return getRpcData("getpeerinfo");
 }
 
+function getBlockCount() {
+	return getRpcData("getblockCount");
+}
+
 function getMempoolTxids() {
 	return getRpcDataWithParams({method:"getrawmempool", parameters:[false]});
 }
@@ -360,5 +364,6 @@ module.exports = {
 	getRpcMethodHelp: getRpcMethodHelp,
 	getAddress: getAddress,
 	getPeerInfo: getPeerInfo,
-	getChainTxStats: getChainTxStats
+	getChainTxStats: getChainTxStats,
+	getBlockCount: getBlockCount,
 };
