@@ -53,8 +53,8 @@ function getPeerInfo() {
 	return getRpcData("getpeerinfo");
 }
 
-function getBlockCount() {
-	return getRpcData("getblockCount");
+function getChainAlgoStats() {
+	return getRpcData("getchainalgostats");
 }
 
 function getMempoolTxids() {
@@ -130,7 +130,7 @@ function getBlockByHash(blockHash, includeTxs) {
 
 	return new Promise(function(resolve, reject) {
 		getRpcDataWithParams({ method: "getblock", parameters: [blockHash] }).then(function (block) {
-			if (includeTxs) {
+			if (includeTxs && block && block.tx) {
 				getRawTransaction(block.tx[0]).then(function (tx) {
 					block.coinbaseTx = tx;
 					block.totalFees = utils.getBlockTotalFeesFromCoinbaseTxAndBlockHeight(tx, block.height);
@@ -365,5 +365,5 @@ module.exports = {
 	getAddress: getAddress,
 	getPeerInfo: getPeerInfo,
 	getChainTxStats: getChainTxStats,
-	getBlockCount: getBlockCount,
+	getChainAlgoStats: getChainAlgoStats,
 };

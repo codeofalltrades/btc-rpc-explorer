@@ -40,7 +40,7 @@ router.get("/", function (req, res, next) {
 		res.end();
 		return;
 	}
-	coreApi.getBlockCount().then(function (algoInfo) {
+	coreApi.getChainAlgoStats().then(function (algoInfo) {
 		res.locals.blockCounts = {};
 		res.locals.blockCounts.total = {};
 		res.locals.blockCounts.pos = algoInfo.pos;
@@ -466,6 +466,12 @@ router.get("/block-height/:blockHeight", function (req, res, next) {
 			res.locals.result.txInputsByTransaction = result.txInputsByTransaction;
 
 			res.render("block");
+
+			next();
+		}).catch(function (err) {
+			res.locals.userMessage = "Error getting block data";
+
+			res.render("error-blank");
 
 			next();
 		});

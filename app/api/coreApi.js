@@ -140,8 +140,8 @@ function getBlockchainInfo() {
 	return tryCacheThenRpcApi(miscCache, "getBlockchainInfo", 10000, rpcApi.getBlockchainInfo);
 }
 
-function getBlockCount() {
-	return tryCacheThenRpcApi(miscCache, "getBlockCount", 10000, rpcApi.getBlockCount);
+function getChainAlgoStats() {
+	return tryCacheThenRpcApi(miscCache, "getChainAlgoStats", 10000, rpcApi.getChainAlgoStats);
 }
 
 function getNetworkInfo() {
@@ -743,63 +743,69 @@ function getBlockByHashWithTransactions(blockHash, txLimit, txOffset) {
 		getBlockByHash(blockHash, true).then(function (block) {
 			var txids = [];
 
-			if (txOffset > 0) {
+			if (txOffset > 0 && block && block.tx) {
 				txids.push(block.tx[0]);
 			}
 
-			for (var i = txOffset; i < Math.min(txOffset + txLimit, block.tx.length); i++) {
-				txids.push(block.tx[i]);
+			if (block && block.tx) {
+				for (var i = txOffset; i < Math.min(txOffset + txLimit, block.tx.length); i++) {
+					txids.push(block.tx[i]);
+				}
 			}
 
-			getRawTransactions(txids).then(function (transactions) {
-				if (transactions.length == txids.length) {
-					block.coinbaseTx = transactions[0];
-					block.totalFees = utils.getBlockTotalFeesFromCoinbaseTxAndBlockHeight(block.coinbaseTx, block.height);
-					block.miner = utils.getMinerFromCoinbaseTx(block.coinbaseTx);
-				}
-
-				// if we're on page 2, we don't really want it anymore...
-				if (txOffset > 0) {
-					transactions.shift();
-				}
-
-				var maxInputsTracked = config.site.txMaxInput;
-				var vinTxids = [];
-				for (var i = 0; i < transactions.length; i++) {
-					var transaction = transactions[i];
-
-					if (transaction && transaction.vin) {
-						for (var j = 0; j < Math.min(maxInputsTracked, transaction.vin.length); j++) {
-							if (transaction.vin[j].txid) {
-								vinTxids.push(transaction.vin[j].txid);
-							}
-						}
+			if(txids.length > 0){
+				getRawTransactions(txids).then(function (transactions) {
+					if (transactions.length == txids.length) {
+						block.coinbaseTx = transactions[0];
+						block.totalFees = utils.getBlockTotalFeesFromCoinbaseTxAndBlockHeight(block.coinbaseTx, block.height);
+						block.miner = utils.getMinerFromCoinbaseTx(block.coinbaseTx);
 					}
-				}
 
-				var txInputsByTransaction = {};
-				getRawTransactions(vinTxids).then(function (vinTransactions) {
-					var vinTxById = {};
+					// if we're on page 2, we don't really want it anymore...
+					if (txOffset > 0) {
+						transactions.shift();
+					}
 
-					vinTransactions.forEach(function (tx) {
-						vinTxById[tx.txid] = tx;
-					});
+					var maxInputsTracked = config.site.txMaxInput;
+					var vinTxids = [];
+					for (var i = 0; i < transactions.length; i++) {
+						var transaction = transactions[i];
 
-					transactions.forEach(function (tx) {
-						txInputsByTransaction[tx.txid] = {};
-
-						if (tx && tx.vin) {
-							for (var i = 0; i < Math.min(maxInputsTracked, tx.vin.length); i++) {
-								if (vinTxById[tx.vin[i].txid]) {
-									txInputsByTransaction[tx.txid][i] = vinTxById[tx.vin[i].txid];
+						if (transaction && transaction.vin) {
+							for (var j = 0; j < Math.min(maxInputsTracked, transaction.vin.length); j++) {
+								if (transaction.vin[j].txid) {
+									vinTxids.push(transaction.vin[j].txid);
 								}
 							}
 						}
+					}
 
-						resolve({ getblock: block, transactions: transactions, txInputsByTransaction: txInputsByTransaction });
+					var txInputsByTransaction = {};
+					getRawTransactions(vinTxids).then(function (vinTransactions) {
+						var vinTxById = {};
+
+						vinTransactions.forEach(function (tx) {
+							vinTxById[tx.txid] = tx;
+						});
+
+						transactions.forEach(function (tx) {
+							txInputsByTransaction[tx.txid] = {};
+
+							if (tx && tx.vin) {
+								for (var i = 0; i < Math.min(maxInputsTracked, tx.vin.length); i++) {
+									if (vinTxById[tx.vin[i].txid]) {
+										txInputsByTransaction[tx.txid][i] = vinTxById[tx.vin[i].txid];
+									}
+								}
+							}
+
+							resolve({ getblock: block, transactions: transactions, txInputsByTransaction: txInputsByTransaction });
+						});
 					});
 				});
-			});
+			} else{
+				reject();
+			}
 		});
 	});
 }
@@ -926,86 +932,6 @@ function logCacheSizes() {
 	stream.end();
 }
 
-function getChainAlgoStats() {
-	return new Promise(function (resolve, reject) {
-		getBlockchainInfo().then(function (getblockchaininfo) {
-			var blockStart = 0;
-			var blockEnd = getblockchaininfo.blocks;
-
-			if (blockEnd > 1440) {
-				blockStart = blockEnd - 1440;
-			}
-
-			if (blockEnd === 0) {
-				reject(`Error 37rhw0e7ufdsgf: blockEnd is both zero)`);
-				return;
-			}
-			debugLog(`start block: ${blockStart}`);
-			debugLog(`end block: ${blockEnd}`);
-
-			var promisesInner = [];
-			for (var ib = blockEnd; ib >= blockStart; ib--) {
-				promisesInner.push(getBlockByHeight(ib, false));
-			}
-
-			debugLog(`promisesInner start`);
-			Promise.all(promisesInner).then(function (results) {
-				debugLog(`promisesInner resolve`);
-				var chainStats = {
-					startHeight: blockStart,
-					endHeight: blockEnd,
-					posCount: 0,
-					posDiff: 0.0,
-					posPercent: 0.0,
-					progPowCount: 0,
-					progPowDiff: 0.0,
-					progPowPercent: 0.0,
-					randomxCount: 0,
-					randomxDiff: 0.0,
-					randomxPercent: 0.0,
-					sha256dCount: 0,
-					sha256dDiff: 0.0,
-					sha256dPercent: 0.0
-				};
-
-				for (var i = results.length - 1; i >= 0; i--) {
-					switch (results[i].proof_type.toLowerCase()) {
-						case 'proof-of-work (sha256d)':
-							chainStats.sha256dCount++;
-							if (chainStats.sha256dDiff === 0.0) { chainStats.sha256dDiff = results[i].difficulty; }
-							break;
-						case 'proof-of-work (randomx)':
-							chainStats.randomxCount++;
-							if (chainStats.randomxDiff === 0.0) { chainStats.randomxDiff = results[i].difficulty; }
-							break;
-						case 'proof-of-work (progpow)':
-							chainStats.progPowCount++;
-							if (chainStats.progPowDiff === 0.0) { chainStats.progPowDiff = results[i].difficulty; }
-							break;
-						default:
-							chainStats.posCount++;
-							if (chainStats.posDiff === 0.0) { chainStats.posDiff = results[i].difficulty; }
-					}
-				}
-
-				var iTotalPowCount = chainStats.sha256dCount + chainStats.randomxCount + chainStats.progPowCount;
-
-				if (iTotalPowCount > 0) {
-					chainStats.progPowPercent = chainStats.progPowCount / iTotalPowCount;
-					chainStats.randomxPercent = chainStats.randomxCount / iTotalPowCount;
-					chainStats.sha256dPercent = chainStats.sha256dCount / iTotalPowCount;
-				}
-
-				debugLog(`promisesInner complete`);
-				resolve({ chainAlgoStats: chainStats });
-
-			}).catch(function (err) {
-				reject(err);
-			});
-		});
-	});
-}
-
 module.exports = {
 	getGenesisBlockHash: getGenesisBlockHash,
 	getGenesisCoinbaseTransactionId: getGenesisCoinbaseTransactionId,
@@ -1034,6 +960,5 @@ module.exports = {
 	getChainTxStats: getChainTxStats,
 	getMempoolDetails: getMempoolDetails,
 	getTxCountStats: getTxCountStats,
-	getChainAlgoStats: getChainAlgoStats,
-	getBlockCount: getBlockCount
+	getChainAlgoStats: getChainAlgoStats
 };
