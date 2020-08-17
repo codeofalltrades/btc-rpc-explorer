@@ -1,13 +1,14 @@
 extends layout
 
 block headContent
-	title Block ##{result.getblock.height.toLocaleString()}, #{result.getblock.hash}
+	title Block #{result.getblock.height}
 
 block content
 	h1.h3 Block
-		small(style="width: 100%;", class="monospace") ##{result.getblock.height.toLocaleString()}
-		br
-		small(style="width: 100%;", class="monospace word-wrap") #{result.getblock.hash}
-	hr
+		small(style="width: 100%;", class="monospace") &nbsp; #{result.getblock.height}
 
+	div(class="alert alert-dark")
+		small(style="width: 100%;", class="monospace word-wrap") #{result.getblock.hash}
+
+	hr
 	include includes/block-content.pug

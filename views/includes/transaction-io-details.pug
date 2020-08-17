@@ -174,12 +174,14 @@ div(class="row monospace")
 										span(class="monospace")
 											span(class="rounded bg-primary text-white px-2 py-1 mr-2") OP_RETURN
 											span #{utils.hex2ascii(vout.scriptPubKey.asm.substring("OP_RETURN ".length))}
-
+									else if(vout.type == "coinbase" && vout.scriptPubKey.type == "nonstandard")
+										span(class="monospace")
+											span(class="text-success font-weight-bold") CoinBase TX
 									else
 										span(class="monospace")
 											span(class="text-warning font-weight-bold") Unable to decode output:
 											br
-											span(class="font-weight-bold") type: 
+											span(class="font-weight-bold") type:
 											span #{vout.scriptPubKey.type}
 											br
 											span(class="font-weight-bold") asm: 
@@ -188,28 +190,26 @@ div(class="row monospace")
 											span(class="font-weight-bold") decodedHex: 
 											span #{utils.hex2ascii(vout.scriptPubKey.hex)}
 
-							div(class="tx-io-value")
-								if (utxos)
-									if (utxos[voutIndex])
-										i.fas.fa-lock.text-success.mr-2(title="Unspent output." data-toggle="tooltip")
-
-									else if (utxos[voutIndex] == null)
-										i.fas.fa-lock-open.text-secondary.mr-2(title="Spent output." data-toggle="tooltip")
-
-								- var currencyValue = vout.value;
-								include ./value-display.pug
-
-
+							//div(class="tx-io-value")
+							//	if (utxos)
+							//		if (utxos[voutIndex])
+							//			i.fas.fa-lock.text-success.mr-2(title="Unspent output." data-toggle="tooltip")
+							//
+							//		else if (utxos[voutIndex] == null)
+							//			i.fas.fa-lock-open.text-secondary.mr-2(title="Spent output." data-toggle="tooltip")
+							//
+							//	- var currencyValue = vout.value;
+							//	include ./value-display.pug
 				hr
 
 		if (hiddenRowCount > 0)
 			a(href="javascript:void(0)", onclick=("showAllTxOutputs(this, '" + tx.txid + "');")) Show all #{tx.vout.length.toLocaleString()} outputs
 
-		div(class="row mb-2 pr-3")
-			div(class="col")
-				div(class="font-weight-bold text-left text-md-right")
-					span(class="d-block d-md-none") Total Output: 
-					- var currencyValue = totalIOValues.output;
-					include ./value-display.pug
+		//div(class="row mb-2 pr-3")
+		//	div(class="col")
+		//		div(class="font-weight-bold text-left text-md-right")
+		//			span(class="d-block d-md-none") Total Output:
+		//			- var currencyValue = totalIOValues.output;
+		//			include ./value-display.pug
 
 
