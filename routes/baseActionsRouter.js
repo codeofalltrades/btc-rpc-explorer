@@ -57,10 +57,17 @@ router.get("/", function (req, res, next) {
 	});
 
 	var promises = [];
+	console.log("--getMempoolInfo");
 	promises.push(coreApi.getMempoolInfo());
+
+	console.log("--getMiningInfo");
 	promises.push(coreApi.getMiningInfo());
 
+
+	console.log("--before getBlockchainInfo");
 	coreApi.getBlockchainInfo().then(function (chaininfo) {
+
+		console.log("--after getBlockchainInfo");
 		res.locals.blockCount = chaininfo.blocks;
 		res.locals.blockOffset = chaininfo.offset;
 		res.locals.getblockchaininfo = chaininfo;
@@ -76,10 +83,15 @@ router.get("/", function (req, res, next) {
 			// hack this to display the genesis block
 			blockHeights.push(0);
 		}
-
+		console.log("--before getBlocksByHeight");
 		promises.push(coreApi.getBlocksByHeight(blockHeights, true));
+		console.log("--after getBlocksByHeight");
 
+
+		console.log("--before Promise.All");
 		Promise.all(promises).then(function(promiseResults) {
+
+			console.log("--after Promise.All");
 			res.locals.mempoolInfo = promiseResults[0];
 			res.locals.miningInfo = promiseResults[1];
 			res.locals.getblockchaininfo.latestBlocks = promiseResults[2];
