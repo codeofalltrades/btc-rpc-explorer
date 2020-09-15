@@ -40,7 +40,7 @@ div(class="row monospace")
 								div(class="tx-io-desc")
 									if (txVin.coinbase)
 										span(class="rounded bg-primary text-white px-2 py-1 mr-2") coinbase
-										span Newly minted coins
+										span Newly mined coins
 									else
 										if (vout && vout.scriptPubKey && vout.scriptPubKey.addresses)
 											div(class="word-wrap")
@@ -73,37 +73,37 @@ div(class="row monospace")
 				else
 					- extraInputCount = extraInputCount + 1;
 
-			if (extraInputCount > 0)
-				div(class="row")
-					div(class="tx-io-label")
-						a(data-toggle="tooltip", title=("Input #" + (tx.vin.length - extraInputCount + 1).toLocaleString() + " - " + tx.vin.length.toLocaleString()), style="white-space: nowrap;")
-							i(class=("fas fa-" + fontawesomeInputName + " mr-2"))
-							span(class="d-inline d-md-none") Input #
-							i(class=("fas fa-ellipsis-h mr-2"))
+				if(txVin.type == "zerocoinspend")
+					div(class="row")
+						div(class="tx-io-label")
+								i(class=("fas fa-" + fontawesomeInputName + " mr-2"))
+								span(class="d-inline d-md-none")
+						div(class="tx-io-content")
+							div(class="row pr-3")
+								div(class="tx-io-desc")
+									span Zerocoin Spend
 
-					div(class="tx-io-content")
-						div(class="row pr-3")
-							div(class="tx-io-desc")
-								span #{extraInputCount.toLocaleString()} more input(s)
-								br
-								span(class="small") see 
-									a(href=("/tx/" + tx.txid)) transactions details
+								div(class="tx-io-value")
+									- var currencyValue = txVin.denomination;
+									include ./value-display.pug
+					hr
 
-							div(class="tx-io-value")
-								- var currencyValue = new Decimal(totalIOValues.output).minus(new Decimal(totalIOValues.input));
-								include ./value-display.pug
-				hr
+				else if (extraInputCount > 0)
+					div(class="row")
+						div(class="tx-io-label")
+							a(data-toggle="tooltip", title=("Input #" + (tx.vin.length - extraInputCount + 1).toLocaleString() + " - " + tx.vin.length.toLocaleString()), style="white-space: nowrap;")
+								i(class=("fas fa-" + fontawesomeInputName + " mr-2"))
+								span(class="d-inline d-md-none") Input #
+						div(class="tx-io-content")
+							div(class="row pr-3")
+								div(class="tx-io-desc")
+									span #{extraInputCount.toLocaleString()} more input(s)
 
-			div(class="row mb-5 mb-lg-2 pr-3")
-				div(class="col")
-					div(class="font-weight-bold text-left text-md-right")
-						span(class="d-block d-md-none") Total Input: 
-						- var currencyValue = totalIOValues.input;
-						include ./value-display.pug
-					
+								div(class="tx-io-value")
+									- var currencyValue = new Decimal(totalIOValues.output).minus(new Decimal(totalIOValues.input));
+									include ./value-display.pug
+					hr
 			
-			
-
 	div(class="col-lg-6")
 		- var maxRegularRowCount = (txIOHighlightAddress != null ? config.site.addressPage.txOutputMaxDefaultDisplay : 10000000);
 		- var regularRowCount = 0;
@@ -174,6 +174,12 @@ div(class="row monospace")
 										span(class="monospace")
 											span(class="rounded bg-primary text-white px-2 py-1 mr-2") OP_RETURN
 											span #{utils.hex2ascii(vout.scriptPubKey.asm.substring("OP_RETURN ".length))}
+									else if(vout.type == "standard" && vout.scriptPubKey.type == "zerocoinmint")
+											span(class="monospace")
+												span(class="text-success font-weight-bold") Zerocoin Mint
+									else if(vout.type == "standard" && vout.scriptPubKey.type == "nonstandard")
+										span(class="monospace")
+											span(class="text-success font-weight-bold") CoinStake TX
 									else if(vout.type == "coinbase" && vout.scriptPubKey.type == "nonstandard")
 										span(class="monospace")
 											span(class="text-success font-weight-bold") CoinBase TX
@@ -190,26 +196,29 @@ div(class="row monospace")
 											span(class="font-weight-bold") decodedHex: 
 											span #{utils.hex2ascii(vout.scriptPubKey.hex)}
 
-							//div(class="tx-io-value")
-							//	if (utxos)
-							//		if (utxos[voutIndex])
-							//			i.fas.fa-lock.text-success.mr-2(title="Unspent output." data-toggle="tooltip")
-							//
-							//		else if (utxos[voutIndex] == null)
-							//			i.fas.fa-lock-open.text-secondary.mr-2(title="Spent output." data-toggle="tooltip")
-							//
-							//	- var currencyValue = vout.value;
-							//	include ./value-display.pug
+							span(class="tx-io-value text-right")
+									if (vout && vout.value)
+										- var currencyValue = vout.value;
+										include ./value-display.pug
 				hr
 
 		if (hiddenRowCount > 0)
 			a(href="javascript:void(0)", onclick=("showAllTxOutputs(this, '" + tx.txid + "');")) Show all #{tx.vout.length.toLocaleString()} outputs
 
-		//div(class="row mb-2 pr-3")
-		//	div(class="col")
-		//		div(class="font-weight-bold text-left text-md-right")
-		//			span(class="d-block d-md-none") Total Output:
-		//			- var currencyValue = totalIOValues.output;
-		//			include ./value-display.pug
-
+		if(tx.vin[0].type == "zerocoinspend")
+			div(class="row mb-2 pr-3")
+				div(class="col")
+					div(class="font-weight-bold text-left text-md-right")
+						span(class="d-block d-md-none") Total Output:
+						- var currencyValue = totalIOValues.output;
+						include ./value-display.pug
+		else
+			div(class="row monospace")
+				div(class="col-lg-12")
+					if (txInputs)
+						div(class="row mb-5 mb-lg-2 pr-3")
+							div(class="col")
+								div(class="font-weight-bold text-left text-md-right")
+										- var currencyValue = totalIOValues.input;
+										include ./tx-value-display.pug
 
