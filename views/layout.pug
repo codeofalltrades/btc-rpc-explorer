@@ -55,9 +55,10 @@ html(lang="en")
 										span  Tools
 									div(class="dropdown-menu shadow", aria-label="Tools Items")
 										each item in config.siteTools
-											a(class="dropdown-item", href=item.url)
-												i(class=item.fontawesome, style="width: 20px; margin-right: 10px;")
-												span  #{item.name}
+											if(!config.demoSite && !(item.name =="Node Status" || item.name =="RPC Browser" || item.name  == "RPC Terminal" || item.name == "Peers"))
+												a(class="dropdown-item", href=item.url)
+													i(class=item.fontawesome, style="width: 20px; margin-right: 10px;")
+													span  #{item.name}
 
 							if (config.site.header.dropdowns)
 								each dropdown, ddIndex in config.site.header.dropdowns
@@ -109,9 +110,10 @@ html(lang="en")
 			div(id="sub-menu", class="container mb-2 pt-2 d-lg-block d-none border-top", style="")
 				ul(class="nav")
 					each item, index in config.siteTools
-						li(class="nav-item")
-							a(href=item.url, class="nav-link text-white px-2 text-decoration-underline")
-								span #{item.name}
+						if(!config.demoSite && !(item.name =="Node Status" || item.name =="RPC Browser" || item.name  == "RPC Terminal" || item.name == "Peers"))
+							li(class="nav-item")
+								a(href=item.url, class="nav-link text-white px-2 text-decoration-underline")
+									span #{item.name}
 		
 		- var bodyBgColor = "#ffffff;";
 		if (session.uiTheme && session.uiTheme == "dark")

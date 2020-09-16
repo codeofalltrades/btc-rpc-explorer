@@ -3,7 +3,7 @@
 if (currencyValue > 0)
 	- var parts = utils.formatCurrencyAmount(currencyValue, currencyFormatType).split(" ");
 
-	span.monospace #{parts[0]}
+	span(class="monospace rounded bg-primary text-white px-2 py-1") #{parts[0]}
 		if (currencyFormatInfo.type == "native")
 			if (global.exchangeRates)
 				small.border-dotted.ml-1(data-toggle="tooltip", title=utils.formatExchangedCurrency(currencyValue, "usd")) #{parts[1]}
@@ -15,4 +15,4 @@ if (currencyValue > 0)
 			small.border-dotted.ml-1(data-toggle="tooltip", title=utils.formatCurrencyAmount(currencyValue, coinConfig.defaultCurrencyUnit.name)) #{parts[1]}
 			
 else
-	span.monospace 0
+	span.monospace Hidden Amount
