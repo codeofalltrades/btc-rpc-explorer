@@ -1,4 +1,4 @@
-### Setup of https://btc-explorer.com on Ubuntu 16.04
+### Setup of https://explorer.veil-project.com/ on Ubuntu 18.04
 
     apt update
     apt upgrade
@@ -11,14 +11,14 @@
     apt upgrade
     apt install python-certbot-nginx
     
-Copy content from [./btc-explorer.com.conf](./btc-explorer.com.conf) into `/etc/nginx/sites-available/btc-explorer.com.conf`
+Copy content from [./veil-block-explorer.com.conf](./veil-block-explorer.conf) into `/etc/nginx/sites-available/veil-block-explorer.com.conf`
 
-    certbot --nginx -d btc-explorer.com
+    certbot --nginx -d explorer.veil-project.com
     cd /etc/ssl/certs
     openssl dhparam -out dhparam.pem 4096
-    cd /home/bitcoin
-    git clone https://github.com/codeofalltrades/btc-rpc-explorer.git
-    cd /home/bitcoin/btc-rpc-explorer
+    cd /home/veil
+    git clone https://github.com/Veil-Project/Veil-Block-Explorer.git
+    cd /home/veil/Veil-Block-Explorer
     npm install
     npm run build
-    pm2 start bin/www --name "btc-rpc-explorer"
+    pm2 start bin/www --name "veil-block-explorer"

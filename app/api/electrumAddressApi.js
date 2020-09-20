@@ -1,5 +1,5 @@
 var debug = require("debug");
-var debugLog = debug("btcexp:electrumx");
+var debugLog = debug("VEILEXP:electrumx");
 
 var config = require("./../config.js");
 var coins = require("../coins.js");
@@ -41,7 +41,7 @@ function connectToServer(host, port, protocol) {
 		var defaultProtocol = port === 50001 ? 'tcp' : 'tls';
 
 		var electrumClient = new ElectrumClient(port, host, protocol || defaultProtocol);
-		electrumClient.initElectrum({client:"btc-rpc-explorer-v1.1", version:"1.4"}).then(function(res) {
+		electrumClient.initElectrum({client:"veil-block-explorer-v1.1", version:"1.4"}).then(function(res) {
 			debugLog("Connected to ElectrumX Server: " + host + ":" + port + ", versions: " + JSON.stringify(res));
 
 			electrumClients.push(electrumClient);

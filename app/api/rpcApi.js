@@ -1,6 +1,6 @@
 var debug = require('debug');
 
-var debugLog = debug("btcexp:rpc");
+var debugLog = debug("VEILEXP:rpc");
 
 var async = require("async");
 

@@ -32,9 +32,9 @@
             "name" : "BTC.TOP",
             "link" : "http://www.btc.top/"
         },
-        "pool.bitcoin.com" : {
-            "name" : "Bitcoin.com",
-            "link" : "https://www.bitcoin.com/"
+        "pool.veil.com" : {
+            "name" : "veil.com",
+            "link" : "https://www.veil.com/"
         },
         "Mined By 175btc.com" : {
             "name" : "175btc",
@@ -56,9 +56,9 @@
             "name" : "BitMinter",
             "link" : "https://bitminter.com/"
         },
-        "/Bitcoin-Russia.ru/" : {
-            "name" : "BitcoinRussia",
-            "link" : "https://bitcoin-russia.ru"
+        "/veil-Russia.ru/" : {
+            "name" : "veilRussia",
+            "link" : "https://veil-russia.ru"
         },
         "btcserv" : {
             "name" : "BTCServ",
@@ -114,7 +114,7 @@
         },
         "st mining corp" : {
             "name" : "ST Mining Corp",
-            "link" : "https://bitcointalk.org/index.php?topic=77000.msg3207708#msg3207708"
+            "link" : "https://veiltalk.org/index.php?topic=77000.msg3207708#msg3207708"
         },
         "bitparking" : {
             "name" : "Bitparking",
@@ -220,9 +220,9 @@
             "name" : "BitClub",
             "link" : "https://bitclubpool.com/"
         },
-        "bitcoinaffiliatenetwork.com" : {
-            "name" : "Bitcoin Affiliate Network",
-            "link" : "https://mining.bitcoinaffiliatenetwork.com/"
+        "veilaffiliatenetwork.com" : {
+            "name" : "veil Affiliate Network",
+            "link" : "https://mining.veilaffiliatenetwork.com/"
         },
         "BTCChina Pool" : {
             "name" : "BTCC",
@@ -360,9 +360,9 @@
             "name" : "58COIN",
             "link" : "https://www.58coin.com"
         },
-        "/Bitcoin-India/" : {
-            "name": "Bitcoin India",
-            "link": "https://bitcoin-india.org"
+        "/veil-India/" : {
+            "name": "veil India",
+            "link": "https://veil-india.org"
         },
         "--Nug--" : {
             "name": "shawnp0wers",
@@ -412,9 +412,9 @@
             "name": "Helix",
             "link": ""
         },
-        "/Bitcoin-Ukraine.com.ua/": {
-            "name": "Bitcoin-Ukraine",
-            "link": "https://bitcoin-ukraine.com.ua/"
+        "/veil-Ukraine.com.ua/": {
+            "name": "veil-Ukraine",
+            "link": "https://veil-ukraine.com.ua/"
         },
         "/poolin.com": {
             "name" : "Poolin",
@@ -471,12 +471,12 @@
             "link" : "https://ghash.io/"
         },
         "14R2r9FkyDmyxGB9xUVwVLdgsX9YfdVamk" : {
-            "name" : "BitcoinRussia",
-            "link" : "https://bitcoin-russia.ru/"
+            "name" : "veilRussia",
+            "link" : "https://veil-russia.ru/"
         },
         "165GCEAx81wce33FWEnPCRhdjcXCrBJdKn" : {
-            "name" : "BitcoinRussia",
-            "link" : "https://bitcoin-russia.ru/"
+            "name" : "veilRussia",
+            "link" : "https://veil-russia.ru/"
         },
         "17kkmDx8eSwj2JTTULb3HkJhCmexfysExz" : {
             "name" : "Polmine",
@@ -731,8 +731,8 @@
             "link" : "http://haozhuzhu.com"
         },
         "1AZ6BkCo4zgTuuLpRStJH8iNsehXTMp456" : {
-            "name" : "BitcoinIndia",
-            "link" : "https://pool.bitcoin-india.org/"
+            "name" : "veilIndia",
+            "link" : "https://pool.veil-india.org/"
         },
         "1FLH1SoLv4U68yUERhDiWzrJn5TggMqkaZ" : {
             "name" : "Waterhole",

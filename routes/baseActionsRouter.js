@@ -1,14 +1,14 @@
 var debug = require("debug");
-var debugLog = debug("btcexp:router");
+var debugLog = debug("VEILEXP:router");
 
 var express = require('express');
 var csurf = require('csurf');
 var router = express.Router();
 var util = require('util');
 var moment = require('moment');
-var bitcoinCore = require("bitcoin-core");
+var veilCore = require("bitcoin-core");;
 var qrcode = require('qrcode');
-var bitcoinjs = require('bitcoinjs-lib');
+var veiljs = require('bitcoinjs-lib');
 var sha256 = require("crypto-js/sha256");
 var hexEnc = require("crypto-js/enc-hex");
 var Decimal = require("decimal.js");
@@ -57,17 +57,16 @@ router.get("/", function (req, res, next) {
 	});
 
 	var promises = [];
-	console.log("--getMempoolInfo");
+	//console.log("--getMempoolInfo");
 	promises.push(coreApi.getMempoolInfo());
 
-	console.log("--getMiningInfo");
+	//console.log("--getMiningInfo");
 	promises.push(coreApi.getMiningInfo());
 
-
-	console.log("--before getBlockchainInfo");
+	//console.log("--before getBlockchainInfo");
 	coreApi.getBlockchainInfo().then(function (chaininfo) {
 
-		console.log("--after getBlockchainInfo");
+		//console.log("--after getBlockchainInfo");
 		res.locals.blockCount = chaininfo.blocks;
 		res.locals.blockOffset = chaininfo.offset;
 		res.locals.getblockchaininfo = chaininfo;
@@ -83,15 +82,15 @@ router.get("/", function (req, res, next) {
 			// hack this to display the genesis block
 			blockHeights.push(0);
 		}
-		console.log("--before getBlocksByHeight");
+		//console.log("--before getBlocksByHeight");
 		promises.push(coreApi.getBlocksByHeight(blockHeights, true));
-		console.log("--after getBlocksByHeight");
+		//console.log("--after getBlocksByHeight");
 
 
-		console.log("--before Promise.All");
+		//console.log("--before Promise.All");
 		Promise.all(promises).then(function(promiseResults) {
 
-			console.log("--after Promise.All");
+			//console.log("--after Promise.All");
 			res.locals.mempoolInfo = promiseResults[0];
 			res.locals.miningInfo = promiseResults[1];
 			res.locals.getblockchaininfo.latestBlocks = promiseResults[2];
@@ -910,7 +909,7 @@ router.get("/address/:address", function (req, res, next) {
 
 router.get("/rpc-terminal", function (req, res, next) {
 	if (!config.demoSite && !req.authenticated) {
-		res.send("RPC Terminal / Browser require authentication. Set an authentication password via the 'BTCEXP_BASIC_AUTH_PASSWORD' environment variable (see .env-sample file for more info).");
+		res.send("RPC Terminal / Browser require authentication. Set an authentication password via the 'VEILEXP_BASIC_AUTH_PASSWORD' environment variable (see .env-sample file for more info).");
 
 		next();
 
@@ -924,7 +923,7 @@ router.get("/rpc-terminal", function (req, res, next) {
 
 router.post("/rpc-terminal", function (req, res, next) {
 	if (!config.demoSite && !req.authenticated) {
-		res.send("RPC Terminal / Browser require authentication. Set an authentication password via the 'BTCEXP_BASIC_AUTH_PASSWORD' environment variable (see .env-sample file for more info).");
+		res.send("RPC Terminal / Browser require authentication. Set an authentication password via the 'VEILEXP_BASIC_AUTH_PASSWORD' environment variable (see .env-sample file for more info).");
 
 		next();
 
@@ -987,7 +986,7 @@ router.post("/rpc-terminal", function (req, res, next) {
 
 router.get("/rpc-browser", function (req, res, next) {
 	if (!config.demoSite && !req.authenticated) {
-		res.send("RPC Terminal / Browser require authentication. Set an authentication password via the 'BTCEXP_BASIC_AUTH_PASSWORD' environment variable (see .env-sample file for more info).");
+		res.send("RPC Terminal / Browser require authentication. Set an authentication password via the 'VEILEXP_BASIC_AUTH_PASSWORD' environment variable (see .env-sample file for more info).");
 
 		next();
 

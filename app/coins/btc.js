@@ -53,10 +53,10 @@ module.exports = {
 	name:"Veil",
 	ticker:"Veil",
 	logoUrl:"/img/logo/veil.png",
-	siteTitle:"Veil Explorer",
-	siteDescriptionHtml:"<b>Veil Explorer</b> is <a href='https://github.com/codeofalltrades/btc-rpc-explorer). If you run your own [Bitcoin Full Node](https://bitcoin.org/en/full-node), **BTC Explorer** can easily run alongside it, communicating via RPC calls. See the project [ReadMe](https://github.com/codeofalltrades/btc-rpc-explorer) for a list of features and instructions for running.",
-	nodeTitle:"Bitcoin Full Node",
-	nodeUrl:"https://bitcoin.org/en/full-node",
+	siteTitle:"Veil Block Explorer",
+	siteDescriptionHtml:"<b>Veil Block Explorer</b> is <a href='https://github.com/veil-project/veil-block-explorer). If you run your own [Veil Full Node](https://veil.org/en/full-node), **Veil Block Explorer** can easily run alongside it, communicating via RPC calls. See the project [ReadMe](https://github.com/veil-project/veil-block-explorer) for a list of features and instructions for running.",
+	nodeTitle:"Veil Full Node",
+	nodeUrl:"https://veil.org/en/full-node",
 	demoSiteUrl: "https://btc.chaintools.io",
 	miningPoolsConfigUrls:[
 		"https://raw.githubusercontent.com/btccom/Blockchain-Known-Pools/master/pools.json",
@@ -186,9 +186,9 @@ module.exports = {
 			chain: "main",
 			blockHeight: 0,
 			blockHash: "000000000019d6689c085ae165831e934ff763ae46a2a6c172b3f1b60a8ce26f",
-			summary: "The Bitcoin Genesis Block.",
-			alertBodyHtml: "This is the first block in the Bitcoin blockchain, known as the 'Genesis Block'. This block was mined by Bitcoin's creator Satoshi Nakamoto. You can read more about <a href='https://en.bitcoin.it/wiki/Genesis_block'>the genesis block</a>.",
-			referenceUrl: "https://en.bitcoin.it/wiki/Genesis_block"
+			summary: "The Veil Genesis Block.",
+			alertBodyHtml: "This is the first block in the Veil blockchain, known as the 'Genesis Block'. This block was mined by Veil's creator Satoshi Nakamoto. You can read more about <a href='https://en.veil.it/wiki/Genesis_block'>the genesis block</a>.",
+			referenceUrl: "https://en.veil.it/wiki/Genesis_block"
 		},
 		{
 			type: "tx",
@@ -196,15 +196,15 @@ module.exports = {
 			chain: "main",
 			txid: "4a5e1e4baab89f3a32518a88c31bc87f618f76673e2cc77ab2127b7afdeda33b",
 			summary: "The coinbase transaction of the Genesis Block.",
-			alertBodyHtml: "This transaction doesn't really exist! This is the coinbase transaction of the <a href='/block/000000000019d6689c085ae165831e934ff763ae46a2a6c172b3f1b60a8ce26f'>Bitcoin Genesis Block</a>. For more background about this special-case transaction, you can read <a href='https://github.com/bitcoin/bitcoin/issues/3303'>this brief discussion</a> among some of the <a href='https://bitcoin.org'>Bitcoin</a> developers.",
-			referenceUrl: "https://github.com/bitcoin/bitcoin/issues/3303"
+			alertBodyHtml: "This transaction doesn't really exist! This is the coinbase transaction of the <a href='/block/000000000019d6689c085ae165831e934ff763ae46a2a6c172b3f1b60a8ce26f'>Veil Genesis Block</a>. For more background about this special-case transaction, you can read <a href='https://github.com/veil/veil/issues/3303'>this brief discussion</a> among some of the <a href='https://veil.org'>Veil</a> developers.",
+			referenceUrl: "https://github.com/veil/veil/issues/3303"
 		},
 		{
 			type: "tx",
 			date: "2009-10-12",
 			chain: "main",
 			txid: "7dff938918f07619abd38e4510890396b1cef4fbeca154fb7aafba8843295ea2",
-			summary: "First bitcoin traded for fiat currency.",
+			summary: "First veil traded for fiat currency.",
 			alertBodyHtml: "In this first-known BTC-to-fiat transaction, 5,050 BTC were exchanged for 5.02 USD, at an effective exchange rate of ~0.001 USD/BTC.",
 			referenceUrl: "https://twitter.com/marttimalmi/status/423455561703624704"
 		},
@@ -238,18 +238,18 @@ module.exports = {
 			date: "2010-05-22",
 			chain: "main",
 			txid: "a1075db55d416d3ca199f55b6084e2115b9345e16c5cf302fc80e9d5fbf5d48d",
-			summary: "The 'Bitcoin Pizza' transaction.",
-			alertBodyHtml: "This is the famous 'Bitcoin Pizza' transaction.",
-			referenceUrl: "https://bitcointalk.org/index.php?topic=137.0"
+			summary: "The 'Veil Pizza' transaction.",
+			alertBodyHtml: "This is the famous 'Veil Pizza' transaction.",
+			referenceUrl: "https://veiltalk.org/index.php?topic=137.0"
 		},
 		{
 			type: "tx",
 			date: "2011-05-18",
 			chain: "main",
 			txid: "5d80a29be1609db91658b401f85921a86ab4755969729b65257651bb9fd2c10d",
-			summary: "Destroyed bitcoin.",
-			referenceUrl: "https://bitcointalk.org/index.php?topic=7253.msg184414#msg184414",
-			referenceUrl2: "https://www.reddit.com/r/Bitcoin/comments/7mhoks/til_in_2011_a_user_running_a_modified_mining/"
+			summary: "Destroyed veil.",
+			referenceUrl: "https://veiltalk.org/index.php?topic=7253.msg184414#msg184414",
+			referenceUrl2: "https://www.reddit.com/r/Veil/comments/7mhoks/til_in_2011_a_user_running_a_modified_mining/"
 		},
 		{
 			type: "blockheight",
@@ -258,8 +258,8 @@ module.exports = {
 			blockHeight: 170,
 			blockHash: "00000000d1145790a8694403d4063f323d499e655c83426834d4ce2f8dd4a2ee",
 			summary: "First block containing a (non-coinbase) transaction.",
-			alertBodyHtml: "This block comes 9 days after the genesis block and is the first to contain a transfer of bitcoin. Before this block all blocks contained only coinbase transactions which mint new bitcoin.",
-			referenceUrl: "https://bitcointalk.org/index.php?topic=91806.msg1012234#msg1012234"
+			alertBodyHtml: "This block comes 9 days after the genesis block and is the first to contain a transfer of veil. Before this block all blocks contained only coinbase transactions which mint new veil.",
+			referenceUrl: "https://veiltalk.org/index.php?topic=91806.msg1012234#msg1012234"
 		},
 		{
 			type: "blockheight",
@@ -286,7 +286,7 @@ module.exports = {
 			txid: "9bf8853b3a823bbfa1e54017ae11a9e1f4d08a854dcce9f24e08114f2c921182",
 			summary: "Block reward lost",
 			alertBodyHtml: "This coinbase transaction completely fails to collect the block's mining reward. 12.5 BTC were lost.",
-			referenceUrl: "https://bitcoin.stackexchange.com/a/67012/3397"
+			referenceUrl: "https://veil.stackexchange.com/a/67012/3397"
 		},
 		{
 			type:"address",
@@ -303,8 +303,8 @@ module.exports = {
 			chain: "main",
 			txid: "e3bf3d07d4b0375638d5f1db5255fe07ba2c4cb067cd81b84ee974b6585fb468",
 			summary: "Duplicated coinbase transaction #1",
-			referenceUrl: "https://bitcoin.stackexchange.com/questions/38994/will-there-be-21-million-bitcoins-eventually/38998#38998",
-			alertBodyHtml: "This is one of 2 'duplicate coinbase' transactions. An early bitcoin bug (fixed by <a href='https://github.com/bitcoin/bips/blob/master/bip-0030.mediawiki'>BIP30</a>) allowed identical coinbase transactions - a newer duplicate would overwrite older copies. This transaction was the coinbase transaction for <a href='/block-height/91722'>Block #91,722</a> and, ~16 hours later, <a href='/block-height/91880'>Block #91,880</a>. The 50 BTC claimed as the coinbase for block 91,722 were also overwritten and lost."
+			referenceUrl: "https://veil.stackexchange.com/questions/38994/will-there-be-21-million-veils-eventually/38998#38998",
+			alertBodyHtml: "This is one of 2 'duplicate coinbase' transactions. An early veil bug (fixed by <a href='https://github.com/veil/bips/blob/master/bip-0030.mediawiki'>BIP30</a>) allowed identical coinbase transactions - a newer duplicate would overwrite older copies. This transaction was the coinbase transaction for <a href='/block-height/91722'>Block #91,722</a> and, ~16 hours later, <a href='/block-height/91880'>Block #91,880</a>. The 50 BTC claimed as the coinbase for block 91,722 were also overwritten and lost."
 		},
 		{
 			type: "tx",
@@ -312,8 +312,8 @@ module.exports = {
 			chain: "main",
 			txid: "d5d27987d2a3dfc724e359870c6644b40e497bdc0589a033220fe15429d88599",
 			summary: "Duplicated coinbase transaction #2",
-			referenceUrl: "https://bitcoin.stackexchange.com/questions/38994/will-there-be-21-million-bitcoins-eventually/38998#38998",
-			alertBodyHtml: "This is one of 2 'duplicate coinbase' transactions. An early bitcoin bug (fixed by <a href='https://github.com/bitcoin/bips/blob/master/bip-0030.mediawiki'>BIP30</a>) allowed identical coinbase transactions - a newer duplicate would overwrite older copies. This transaction was the coinbase transaction for <a href='/block-height/91812'>Block #91,812</a> and, ~3 hours later, <a href='/block-height/91842'>Block #91,842</a>. The 50 BTC claimed as the coinbase for block 91,812 were also overwritten and lost."
+			referenceUrl: "https://veil.stackexchange.com/questions/38994/will-there-be-21-million-veils-eventually/38998#38998",
+			alertBodyHtml: "This is one of 2 'duplicate coinbase' transactions. An early veil bug (fixed by <a href='https://github.com/veil/bips/blob/master/bip-0030.mediawiki'>BIP30</a>) allowed identical coinbase transactions - a newer duplicate would overwrite older copies. This transaction was the coinbase transaction for <a href='/block-height/91812'>Block #91,812</a> and, ~3 hours later, <a href='/block-height/91842'>Block #91,842</a>. The 50 BTC claimed as the coinbase for block 91,812 were also overwritten and lost."
 		},
 
 
@@ -324,9 +324,9 @@ module.exports = {
 			chain: "test",
 			blockHeight: 0,
 			blockHash: "000000000933ea01ad0ee984209779baaec3ced90fa3f408719526f8d77f4943",
-			summary: "The Bitcoin (regtest) Genesis Block.",
-			alertBodyHtml: "This is the first block in the Bitcoin blockchain, known as the 'Genesis Block'. You can read more about <a href='https://en.bitcoin.it/wiki/Genesis_block'>the genesis block</a>.",
-			referenceUrl: "https://en.bitcoin.it/wiki/Genesis_block"
+			summary: "The Veil (regtest) Genesis Block.",
+			alertBodyHtml: "This is the first block in the Veil blockchain, known as the 'Genesis Block'. You can read more about <a href='https://en.veil.it/wiki/Genesis_block'>the genesis block</a>.",
+			referenceUrl: "https://en.veil.it/wiki/Genesis_block"
 		},
 		{
 			type: "tx",
@@ -334,8 +334,8 @@ module.exports = {
 			chain: "test",
 			txid: "4a5e1e4baab89f3a32518a88c31bc87f618f76673e2cc77ab2127b7afdeda33b",
 			summary: "The coinbase transaction of the Genesis Block.",
-			alertBodyHtml: "This transaction doesn't really exist! This is the coinbase transaction of the <a href='/block/000000000019d6689c085ae165831e934ff763ae46a2a6c172b3f1b60a8ce26f'>Bitcoin Genesis Block</a>. For more background about this special-case transaction, you can read <a href='https://github.com/bitcoin/bitcoin/issues/3303'>this brief discussion</a> among some of the <a href='https://bitcoin.org'>Bitcoin</a> developers.",
-			referenceUrl: "https://github.com/bitcoin/bitcoin/issues/3303"
+			alertBodyHtml: "This transaction doesn't really exist! This is the coinbase transaction of the <a href='/block/000000000019d6689c085ae165831e934ff763ae46a2a6c172b3f1b60a8ce26f'>Bitcoin Genesis Block</a>. For more background about this special-case transaction, you can read <a href='https://github.com/veil/veil/issues/3303'>this brief discussion</a> among some of the <a href='https://veil.org'>Bitcoin</a> developers.",
+			referenceUrl: "https://github.com/veil/veil/issues/3303"
 		},
 
 
@@ -347,8 +347,8 @@ module.exports = {
 			blockHeight: 0,
 			blockHash: "0f9188f13cb7b2c71f2a335e3a4fc328bf5beb436012afca590b1a11466e2206",
 			summary: "The Bitcoin (regtest) Genesis Block.",
-			alertBodyHtml: "This is the first block in the Bitcoin blockchain, known as the 'Genesis Block'. You can read more about <a href='https://en.bitcoin.it/wiki/Genesis_block'>the genesis block</a>.",
-			referenceUrl: "https://en.bitcoin.it/wiki/Genesis_block"
+			alertBodyHtml: "This is the first block in the Bitcoin blockchain, known as the 'Genesis Block'. You can read more about <a href='https://en.veil.it/wiki/Genesis_block'>the genesis block</a>.",
+			referenceUrl: "https://en.veil.it/wiki/Genesis_block"
 		},
 		{
 			type: "tx",
@@ -356,8 +356,8 @@ module.exports = {
 			chain: "regtest",
 			txid: "4a5e1e4baab89f3a32518a88c31bc87f618f76673e2cc77ab2127b7afdeda33b",
 			summary: "The coinbase transaction of the Genesis Block.",
-			alertBodyHtml: "This transaction doesn't really exist! This is the coinbase transaction of the <a href='/block/000000000019d6689c085ae165831e934ff763ae46a2a6c172b3f1b60a8ce26f'>Bitcoin Genesis Block</a>. For more background about this special-case transaction, you can read <a href='https://github.com/bitcoin/bitcoin/issues/3303'>this brief discussion</a> among some of the <a href='https://bitcoin.org'>Bitcoin</a> developers.",
-			referenceUrl: "https://github.com/bitcoin/bitcoin/issues/3303"
+			alertBodyHtml: "This transaction doesn't really exist! This is the coinbase transaction of the <a href='/block/000000000019d6689c085ae165831e934ff763ae46a2a6c172b3f1b60a8ce26f'>Bitcoin Genesis Block</a>. For more background about this special-case transaction, you can read <a href='https://github.com/veil/veil/issues/3303'>this brief discussion</a> among some of the <a href='https://veil.org'>Bitcoin</a> developers.",
+			referenceUrl: "https://github.com/veil/veil/issues/3303"
 		},
 	],
 	exchangeRateData:{

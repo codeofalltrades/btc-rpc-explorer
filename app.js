@@ -7,7 +7,7 @@ var path = require('path');
 var dotenv = require("dotenv");
 var fs = require('fs');
 
-var configPaths = [ path.join(os.homedir(), '.config', 'btc-rpc-explorer.env'), path.join(process.cwd(), '.env') ];
+var configPaths = [ path.join(os.homedir(), '.config', 'veil-block-explorer.env'), path.join(process.cwd(), '.env') ];
 configPaths.filter(fs.existsSync).forEach(path => {
 	console.log('Loading env file:', path);
 	dotenv.config({ path });
@@ -16,10 +16,10 @@ configPaths.filter(fs.existsSync).forEach(path => {
 // debug module is already loaded by the time we do dotenv.config
 // so refresh the status of DEBUG env var
 var debug = require("debug");
-debug.enable(process.env.DEBUG || "btcexp:app,btcexp:error");
+debug.enable(process.env.DEBUG || "VEILEXP:app,VEILEXP:error");
 
-var debugLog = debug("btcexp:app");
-var debugPerfLog = debug("btcexp:actionPerformace");
+var debugLog = debug("VEILEXP:app");
+var debugPerfLog = debug("VEILEXP:actionPerformace");
 
 var express = require('express');
 var favicon = require('serve-favicon');
@@ -33,7 +33,7 @@ var simpleGit = require('simple-git');
 var utils = require("./app/utils.js");
 var moment = require("moment");
 var Decimal = require('decimal.js');
-var bitcoinCore = require("bitcoin-core");
+var veilCore = require("bitcoin-core");
 var pug = require("pug");
 var momentDurationFormat = require("moment-duration-format");
 var coreApi = require("./app/api/coreApi.js");
@@ -66,9 +66,9 @@ app.engine('pug', (path, options, fn) => {
 app.set('view engine', 'pug');
 
 // basic http authentication
-// if (process.env.BTCEXP_BASIC_AUTH_PASSWORD) {
+// if (process.env.VEILEXP_BASIC_AUTH_PASSWORD) {
 // 	app.disable('x-powered-by');
-// 	app.use(auth(process.env.BTCEXP_BASIC_AUTH_PASSWORD));
+// 	app.use(auth(process.env.VEILEXP_BASIC_AUTH_PASSWORD));
 // }
 
 // uncomment after placing your favicon in /public
@@ -121,7 +121,7 @@ function loadMiningPoolConfigs() {
 
 function getSourcecodeProjectMetadata() {
 	var options = {
-		url: "https://api.github.com/repos/janoside/btc-rpc-explorer",
+		url: "https://api.github.com/repos/Veil-Project/veil-block-explorer",
 		headers: {
 			'User-Agent': 'request'
 		}
@@ -263,7 +263,7 @@ app.continueStartup = function() {
 		timeout: rpcCred.timeout
 	};
 
-	global.rpcClient = new bitcoinCore(rpcClientProperties);
+	global.rpcClient = new veilCore(rpcClientProperties);
 
 	var rpcClientNoTimeoutProperties = {
 		host: rpcCred.host,
@@ -273,7 +273,7 @@ app.continueStartup = function() {
 		timeout: 0
 	};
 
-	global.rpcClientNoTimeout = new bitcoinCore(rpcClientNoTimeoutProperties);
+	global.rpcClientNoTimeout = new veilCore(rpcClientNoTimeoutProperties);
 
 
 	// keep trying to verify rpc connection until we succeed
@@ -300,7 +300,7 @@ app.continueStartup = function() {
 	if (config.addressApi) {
 		var supportedAddressApis = addressApi.getSupportedAddressApis();
 		if (!supportedAddressApis.includes(config.addressApi)) {
-			utils.logError("32907ghsd0ge", `Unrecognized value for BTCEXP_ADDRESS_API: '${config.addressApi}'. Valid options are: ${supportedAddressApis}`);
+			utils.logError("32907ghsd0ge", `Unrecognized value for VEILEXP_ADDRESS_API: '${config.addressApi}'. Valid options are: ${supportedAddressApis}`);
 		}
 
 		if (config.addressApi == "electrumx") {
@@ -312,7 +312,7 @@ app.continueStartup = function() {
 					utils.logError("31207ugf4e0fed", err, {electrumXServers:config.electrumXServers});
 				});
 			} else {
-				utils.logError("327hs0gde", "You must set the 'BTCEXP_ELECTRUMX_SERVERS' environment variable when BTCEXP_ADDRESS_API=electrumx.");
+				utils.logError("327hs0gde", "You must set the 'VEILEXP_ELECTRUMX_SERVERS' environment variable when VEILEXP_ADDRESS_API=electrumx.");
 			}
 		}
 	}

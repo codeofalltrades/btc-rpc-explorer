@@ -5,7 +5,7 @@ var url = require('url');
 var coins = require("./coins.js");
 var credentials = require("./credentials.js");
 
-var currentCoin = process.env.BTCEXP_COIN || "VEIL";
+var currentCoin = process.env.VEILEXP_COIN || "VEIL";
 
 var rpcCred = credentials.rpc;
 
@@ -19,13 +19,13 @@ if (rpcCred.cookie && !rpcCred.username && !rpcCred.password && fs.existsSync(rp
 	}
 }
 
-var cookieSecret = process.env.BTCEXP_COOKIE_SECRET
+var cookieSecret = process.env.VEILEXP_COOKIE_SECRET
  || (rpcCred.password && crypto.createHmac('sha256', JSON.stringify(rpcCred))
-                               .update('btc-rpc-explorer-cookie-secret').digest('hex'))
+                               .update('veil-block-explorer-cookie-secret').digest('hex'))
  || "0x000000000019d6689c085ae165831e934ff763ae46a2a6c172b3f1b60a8ce26f";
 
 
-var electrumXServerUriStrings = (process.env.BTCEXP_ELECTRUMX_SERVERS || "").split(',').filter(Boolean);
+var electrumXServerUriStrings = (process.env.VEILEXP_ELECTRUMX_SERVERS || "").split(',').filter(Boolean);
 var electrumXServers = [];
 for (var i = 0; i < electrumXServerUriStrings.length; i++) {
 	var uri = url.parse(electrumXServerUriStrings[i]);
@@ -33,13 +33,13 @@ for (var i = 0; i < electrumXServerUriStrings.length; i++) {
 	electrumXServers.push({protocol:uri.protocol.substring(0, uri.protocol.length - 1), host:uri.hostname, port:parseInt(uri.port)});
 }
 
-["BTCEXP_DEMO", "BTCEXP_PRIVACY_MODE", "BTCEXP_NO_INMEMORY_RPC_CACHE"].forEach(function(item) {
+["VEILEXP_DEMO", "VEILEXP_PRIVACY_MODE", "VEILEXP_NO_INMEMORY_RPC_CACHE"].forEach(function(item) {
 	if (process.env[item] === undefined) {
 		process.env[item] = "false";
 	}
 });
 
-["BTCEXP_NO_RATES", "BTCEXP_UI_SHOW_TOOLS_SUBHEADER"].forEach(function(item) {
+["VEILEXP_NO_RATES", "VEILEXP_UI_SHOW_TOOLS_SUBHEADER"].forEach(function(item) {
 	if (process.env[item] === undefined) {
 		process.env[item] = "true";
 	}
@@ -50,16 +50,16 @@ module.exports = {
 
 	cookieSecret: cookieSecret,
 
-	privacyMode: (process.env.BTCEXP_PRIVACY_MODE.toLowerCase() == "true"),
-	demoSite: (process.env.BTCEXP_DEMO.toLowerCase() == "true"),
-	queryExchangeRates: (process.env.BTCEXP_NO_RATES.toLowerCase() != "true"),
-	noInmemoryRpcCache: (process.env.BTCEXP_NO_INMEMORY_RPC_CACHE.toLowerCase() == "true"),
+	privacyMode: (process.env.VEILEXP_PRIVACY_MODE.toLowerCase() == "true"),
+	demoSite: (process.env.VEILEXP_DEMO.toLowerCase() == "true"),
+	queryExchangeRates: (process.env.VEILEXP_NO_RATES.toLowerCase() != "true"),
+	noInmemoryRpcCache: (process.env.VEILEXP_NO_INMEMORY_RPC_CACHE.toLowerCase() == "true"),
 	
-	rpcConcurrency: (process.env.BTCEXP_RPC_CONCURRENCY || 10),
+	rpcConcurrency: (process.env.VEILEXP_RPC_CONCURRENCY || 10),
 
 	rpcBlacklist:
-	  process.env.BTCEXP_RPC_ALLOWALL  ? []
-	: process.env.BTCEXP_RPC_BLACKLIST ? process.env.BTCEXP_RPC_BLACKLIST.split(',').filter(Boolean)
+	  process.env.VEILEXP_RPC_ALLOWALL  ? []
+	: process.env.VEILEXP_RPC_BLACKLIST ? process.env.VEILEXP_RPC_BLACKLIST.split(',').filter(Boolean)
 	: [
 		"addnode",
 		"backupwallet",
@@ -133,10 +133,10 @@ module.exports = {
 		"walletpassphrasechange",
 	],
 
-	addressApi:process.env.BTCEXP_ADDRESS_API,
+	addressApi:process.env.VEILEXP_ADDRESS_API,
 	electrumXServers:electrumXServers,
 
-	redisUrl:process.env.BTCEXP_REDIS_URL,
+	redisUrl:process.env.VEILEXP_REDIS_URL,
 
 	site: {
 		blockTxPageSize:20,
@@ -147,7 +147,7 @@ module.exports = {
 			txOutputMaxDefaultDisplay:10
 		},
 		header:{
-			showToolsSubheader:(process.env.BTCEXP_UI_SHOW_TOOLS_SUBHEADER == "true"),
+			showToolsSubheader:(process.env.VEILEXP_UI_SHOW_TOOLS_SUBHEADER == "true"),
 			dropdowns:[
 				{
 					title:"Related Sites",

@@ -1,7 +1,7 @@
 var debug = require("debug");
 
-var debugLog = debug("btcexp:utils");
-var debugErrorLog = debug("btcexp:error");
+var debugLog = debug("VEILEXP:utils");
+var debugErrorLog = debug("VEILEXP:error");
 
 var Decimal = require("decimal.js");
 var request = require("request");
