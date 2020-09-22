@@ -587,9 +587,11 @@ router.get("/tx/:transactionId", function (req, res, next) {
 				res.locals.result.getblock = result3;
 
 				var txids = [];
-				for (var i = 0; i < rawTxResult.vin.length; i++) {
-					if (!rawTxResult.vin[i].coinbase) {
-						txids.push(rawTxResult.vin[i].txid);
+				if(rawTxResult.vin){
+					for (var i = 0; i < rawTxResult.vin.length; i++) {
+						if (!rawTxResult.vin[i].coinbase) {
+							txids.push(rawTxResult.vin[i].txid);
+						}
 					}
 				}
 

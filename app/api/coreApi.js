@@ -625,8 +625,10 @@ function getTxUtxos(tx) {
 	return new Promise(function (resolve, reject) {
 		var promises = [];
 
-		for (var i = 0; i < tx.vout.length; i++) {
-			promises.push(getUtxo(tx.txid, i));
+		if(tx.vout){
+			for (var i = 0; i < tx.vout.length; i++) {
+				promises.push(getUtxo(tx.txid, i));
+			}
 		}
 
 		Promise.all(promises).then(function (results) {
